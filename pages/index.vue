@@ -3,16 +3,13 @@ useHead({
   title: 'ig.fz.ax',
 })
 
-interface PracticeRef {
-  name: string
-  metric: string
-  href: string
-}
+const year = new Date().getUTCFullYear().toString()
 
-const practices: PracticeRef[] = [
+// Stage 1 placeholder — Stages 3-4 derive practices from the manifest.
+const practices = [
   { name: 'sky', metric: '0 days', href: '/sky' },
   { name: 'count', metric: '0 / 217', href: '/count' },
-]
+] as const
 </script>
 
 <template>
@@ -27,7 +24,7 @@ const practices: PracticeRef[] = [
       />
     </section>
     <p class="home-caption">
-      <span class="long-now-zero">0</span>{{ new Date().getUTCFullYear() }} · practices
+      <span class="long-now-zero">0</span>{{ year }} · practices
     </p>
   </main>
 </template>
