@@ -1,5 +1,6 @@
 import { describe, it, expect } from 'vitest'
-import { loadConfig, DEFAULT_CONFIG, type IgConfig } from '~/utils/config'
+import { loadConfig } from '~/scripts/lib/config-loader'
+import { DEFAULT_CONFIG, type IgConfig } from '~/utils/config'
 import { writeFileSync, mkdtempSync, rmSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'

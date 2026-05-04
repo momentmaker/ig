@@ -1,7 +1,8 @@
 #!/usr/bin/env tsx
 import { execFileSync } from 'node:child_process'
 import { validateManifest, type Manifest } from '../utils/manifestSchema'
-import { loadConfig, type IgConfig } from '../utils/config'
+import type { IgConfig } from '../utils/config'
+import { loadConfig } from './lib/config-loader'
 
 const MANIFEST_PATH = 'data/manifest.json'
 

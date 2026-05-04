@@ -1,7 +1,8 @@
 #!/usr/bin/env tsx
 import { fileURLToPath } from 'node:url'
 import { loadManifest, saveManifest } from './lib/manifest'
-import { loadConfig, type IgConfig } from '../utils/config'
+import type { IgConfig } from '../utils/config'
+import { loadConfig } from './lib/config-loader'
 import type { Entry, Manifest } from '../utils/manifestSchema'
 import { Storage } from '@google-cloud/storage'
 
