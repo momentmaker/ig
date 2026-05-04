@@ -1,0 +1,128 @@
+import { describe, it, expect } from 'vitest'
+import {
+  validateManifest,
+  validateEntry,
+  sortEntries,
+  type Manifest,
+  type SkyEntry,
+  type CountEntry,
+} from '~/utils/manifestSchema'
+
+const validSky: SkyEntry = {
+  type: 'sky',
+  date: '2026-05-03',
+  url: 'https://storage.googleapis.com/sky-photos/2026-05-03.jpg',
+  w: 1600,
+  h: 1200,
+  color: '#a8c4e6',
+  solstice: false,
+}
+
+const validCount: CountEntry = {
+  type: 'count',
+  n: 87,
+  date: '2026-05-03',
+  url: 'https://storage.googleapis.com/count-photos/087-2026-05-03.jpg',
+  w: 1600,
+  h: 1200,
+}
+
+describe('validateEntry', () => {
+  it('accepts a valid sky entry', () => {
+    expect(() => validateEntry(validSky)).not.toThrow()
+  })
+
+  it('accepts a valid count entry', () => {
+    expect(() => validateEntry(validCount)).not.toThrow()
+  })
+
+  it('rejects sky entry with malformed date', () => {
+    expect(() => validateEntry({ ...validSky, date: '5/3/26' })).toThrow(/date/i)
+  })
+
+  it('rejects count entry with n out of range', () => {
+    expect(() => validateEntry({ ...validCount, n: 217 })).toThrow(/0-216/)
+    expect(() => validateEntry({ ...validCount, n: -1 })).toThrow(/0-216/)
+  })
+
+  it('rejects count entry with non-integer n', () => {
+    expect(() => validateEntry({ ...validCount, n: 87.5 })).toThrow(/integer/i)
+  })
+
+  it('rejects count entry with whisper longer than 240 chars', () => {
+    const long = 'x'.repeat(241)
+    expect(() => validateEntry({ ...validCount, whisper: long })).toThrow(/240/)
+  })
+
+  it('accepts count entry with empty whisper omitted', () => {
+    expect(() => validateEntry({ ...validCount })).not.toThrow()
+  })
+
+  it('rejects entry with unknown type', () => {
+    expect(() => validateEntry({ ...validSky, type: 'rainbow' as 'sky' })).toThrow(/type/i)
+  })
+
+  it('rejects sky entry missing dominant color', () => {
+    const { color: _, ...rest } = validSky
+    expect(() => validateEntry(rest as SkyEntry)).toThrow(/color/i)
+  })
+
+  it('rejects sky entry with non-hex color', () => {
+    expect(() => validateEntry({ ...validSky, color: 'not-a-hex' })).toThrow(/color/i)
+  })
+
+  it('rejects entry with non-https url', () => {
+    expect(() => validateEntry({ ...validSky, url: 'http://example.com/x.jpg' })).toThrow(/url/i)
+  })
+})
+
+describe('validateManifest', () => {
+  it('accepts an empty manifest', () => {
+    const m: Manifest = { version: 1, license: 'CC0-1.0', entries: [] }
+    expect(() => validateManifest(m)).not.toThrow()
+  })
+
+  it('accepts a manifest with one of each type', () => {
+    const m: Manifest = { version: 1, license: 'CC0-1.0', entries: [validSky, validCount] }
+    expect(() => validateManifest(m)).not.toThrow()
+  })
+
+  it('rejects a manifest with wrong version', () => {
+    const m = { version: 2, license: 'CC0-1.0', entries: [] } as unknown as Manifest
+    expect(() => validateManifest(m)).toThrow(/version/i)
+  })
+
+  it('rejects a manifest with duplicate sky dates', () => {
+    const m: Manifest = { version: 1, license: 'CC0-1.0', entries: [validSky, validSky] }
+    expect(() => validateManifest(m)).toThrow(/duplicate sky/i)
+  })
+
+  it('rejects a manifest with duplicate count numbers', () => {
+    const m: Manifest = { version: 1, license: 'CC0-1.0', entries: [validCount, validCount] }
+    expect(() => validateManifest(m)).toThrow(/duplicate count/i)
+  })
+})
+
+describe('sortEntries', () => {
+  it('sorts count entries before sky entries (alphabetical type)', () => {
+    const result = sortEntries([validSky, validCount])
+    expect(result[0]?.type).toBe('count')
+    expect(result[1]?.type).toBe('sky')
+  })
+
+  it('sorts count entries by n ascending', () => {
+    const c1: CountEntry = { ...validCount, n: 5 }
+    const c2: CountEntry = { ...validCount, n: 100 }
+    const c3: CountEntry = { ...validCount, n: 42 }
+    const result = sortEntries([c1, c2, c3])
+    expect(result.map(e => (e as CountEntry).n)).toEqual([5, 42, 100])
+  })
+
+  it('sorts sky entries by date ascending', () => {
+    const s1: SkyEntry = { ...validSky, date: '2026-01-15' }
+    const s2: SkyEntry = { ...validSky, date: '2026-12-31' }
+    const s3: SkyEntry = { ...validSky, date: '2026-06-01' }
+    const result = sortEntries([s1, s2, s3])
+    expect(result.map(e => (e as SkyEntry).date)).toEqual(['2026-01-15', '2026-06-01', '2026-12-31'])
+  })
+})
