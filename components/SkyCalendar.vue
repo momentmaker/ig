@@ -1,0 +1,131 @@
+<script setup lang="ts">
+import { computed } from 'vue'
+import { skyEntriesByYear, gridForYear, type SkyCell } from '~/utils/sky-grid'
+import { isoWeekYear } from '~/utils/iso-week'
+import type { SkyEntry } from '~/utils/manifestSchema'
+
+interface Props {
+  entries: SkyEntry[]
+  today: string
+}
+const props = defineProps<Props>()
+const emit = defineEmits<{
+  'photo-click': [entry: SkyEntry]
+}>()
+
+const yearsToRender = computed(() => {
+  const grouped = skyEntriesByYear(props.entries)
+  const years = new Set<number>(grouped.keys())
+  years.add(isoWeekYear(new Date(`${props.today}T00:00:00Z`)))
+  return Array.from(years).sort((a, b) => b - a)
+})
+
+const sections = computed(() => yearsToRender.value.map(year => ({
+  year,
+  grid: gridForYear(year, props.entries, props.today),
+})))
+
+function cellClass(cell: SkyCell | null): string {
+  if (cell === null) return 'pad'
+  if (cell.kind === 'has-photo' || cell.kind === 'today-with-photo') {
+    return cell.entry.solstice ? 'has-photo solstice-halo' : 'has-photo'
+  }
+  return cell.kind
+}
+
+function cellStyle(cell: SkyCell | null): string {
+  if (cell !== null && (cell.kind === 'has-photo' || cell.kind === 'today-with-photo')) {
+    return `background-color: ${cell.entry.color}`
+  }
+  return ''
+}
+
+function isToday(cell: SkyCell | null): boolean {
+  return cell !== null && (cell.kind === 'today-with-photo' || cell.kind === 'today-empty')
+}
+
+function onCellClick(cell: SkyCell | null): void {
+  if (cell !== null && (cell.kind === 'has-photo' || cell.kind === 'today-with-photo')) {
+    emit('photo-click', cell.entry)
+  }
+}
+</script>
+
+<template>
+  <div class="sky-calendar">
+    <section
+      v-for="section in sections"
+      :key="section.year"
+      class="sky-year"
+      :data-year="section.year"
+    >
+      <h2 class="year-label">{{ section.year }}</h2>
+      <div class="grid">
+        <div
+          v-for="(week, w) in section.grid"
+          :key="w"
+          class="week-col"
+        >
+          <button
+            v-for="(cell, d) in week"
+            :key="d"
+            type="button"
+            class="cell"
+            :class="[cellClass(cell), { today: isToday(cell) }]"
+            :style="cellStyle(cell)"
+            :data-date="cell?.date"
+            :disabled="cell === null || (cell.kind !== 'has-photo' && cell.kind !== 'today-with-photo')"
+            :title="cell?.date ?? ''"
+            @click="onCellClick(cell)"
+          />
+        </div>
+      </div>
+    </section>
+  </div>
+</template>
+
+<style scoped>
+.sky-calendar { display: flex; flex-direction: column; gap: 2rem; }
+.sky-year { display: flex; flex-direction: column; gap: 0.5rem; }
+.year-label {
+  font-size: 0.85rem;
+  font-variant: small-caps;
+  letter-spacing: 0.15em;
+  color: var(--ig-fg-faint);
+  margin: 0;
+}
+.grid { display: grid; grid-template-columns: repeat(53, minmax(0, 1fr)); gap: 2px; }
+.week-col { display: grid; grid-template-rows: repeat(7, 1fr); gap: 2px; }
+.cell {
+  aspect-ratio: 1;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: default;
+}
+.cell.has-photo,
+.cell.today-with-photo {
+  cursor: pointer;
+}
+.cell.gap {
+  background: transparent;
+  border: 1px solid var(--ig-fg-faint);
+  opacity: 0.25;
+}
+.cell.future, .cell.pad { background: transparent; }
+.cell.today {
+  outline: 2px solid var(--ig-yellow);
+  outline-offset: 1px;
+  animation: breathe 2.4s ease-in-out infinite;
+}
+.cell.solstice-halo {
+  box-shadow: 0 0 0 2px var(--ig-gold);
+}
+@keyframes breathe {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cell.today { animation: none; }
+}
+</style>
