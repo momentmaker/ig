@@ -68,9 +68,10 @@ describe('runRemove', () => {
     rmSync(dir, { recursive: true, force: true })
   })
 
-  it('throws when no matching entry exists', async () => {
+  it('throws when no matching entry exists and does not call GCS delete', async () => {
     const { dir, manifestPath } = temp({ version: 1, license: 'CC0-1.0', entries: [] })
-    const fakeStorage = { bucket: () => ({ file: () => ({ delete: vi.fn() }) }) }
+    const del = vi.fn()
+    const fakeStorage = { bucket: () => ({ file: () => ({ delete: del }) }) }
     await expect(runRemove({
       type: 'sky',
       id: '2026-05-03',
@@ -78,6 +79,7 @@ describe('runRemove', () => {
       storage: fakeStorage,
       config: { timezone: 'UTC', skyBucket: 'sky-photos', countBucket: 'count-photos' },
     })).rejects.toThrow(/not found/i)
+    expect(del).not.toHaveBeenCalled()
     rmSync(dir, { recursive: true, force: true })
   })
 })

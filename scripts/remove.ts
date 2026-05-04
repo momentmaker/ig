@@ -45,14 +45,23 @@ export async function runRemove(opts: RemoveOptions): Promise<Entry> {
     throw new Error(`entry not found: type=${opts.type} id=${opts.id}`)
   }
 
-  const bucket = target.type === 'sky' ? config.skyBucket : config.countBucket
-  await storage.bucket(bucket).file(objectNameFor(target)).delete()
-
+  // Manifest first, then GCS. If the GCS delete fails after the manifest
+  // is saved, we leave a CC0-licensed orphan in the bucket — recoverable by
+  // name. The opposite order would leave a 404 URL in the manifest, which
+  // breaks the rendered site.
   const next: Manifest = {
     ...manifest,
     entries: manifest.entries.filter(e => e !== target),
   }
   saveManifest(manifestPath, next)
+
+  const bucket = target.type === 'sky' ? config.skyBucket : config.countBucket
+  try {
+    await storage.bucket(bucket).file(objectNameFor(target)).delete()
+  }
+  catch (err) {
+    console.error(`warning: manifest cleared but GCS delete failed for ${objectNameFor(target)}: ${(err as Error).message}`)
+  }
   return target
 }
 
@@ -70,8 +79,7 @@ async function main(): Promise<void> {
   const id = args[1]!
   try {
     const removed = await runRemove({ type, id })
-    console.log(`removed ${type} ${id}`)
-    void removed
+    console.log(`removed ${type} ${id}: ${removed.url}`)
   }
   catch (err) {
     console.error((err as Error).message)
