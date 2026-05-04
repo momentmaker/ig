@@ -1,0 +1,26 @@
+# Nuxt + Node
+node_modules/
+.output/
+.nuxt/
+dist/
+coverage/
+
+# Logs
+*.log
+.npm/
+.pnpm-debug.log*
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Environment
+.env
+.env.*
+
+# Service account JSONs MUST never be committed (see spec section "Auth")
+# This is belt-and-suspenders — the canonical path is ~/.config/ig-fz-ax/sa.json
+*-sa.json
+sa.json
+service-account*.json
