@@ -1,5 +1,15 @@
 {
   "version": 1,
   "license": "CC0-1.0",
-  "entries": []
+  "entries": [
+    {
+      "type": "sky",
+      "date": "2026-05-04",
+      "url": "https://storage.googleapis.com/skyphotos/2026-05-04.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false
+    }
+  ]
 }
