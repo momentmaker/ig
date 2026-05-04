@@ -1,15 +1,12 @@
 <script setup lang="ts">
-const year = new Date().getUTCFullYear()
-const yearStr = year.toString()
-const leadingZero = '0'
-const restOfYear = yearStr
+const year = new Date().getUTCFullYear().toString()
 </script>
 
 <template>
   <footer class="site-footer">
     <a href="https://fz.ax" class="footer-back-link">← fz.ax</a>
     <span class="long-now-line">
-      <span class="long-now-zero">{{ leadingZero }}</span>{{ restOfYear }} · the long now
+      <span class="long-now-zero">0</span>{{ year }} · the long now
     </span>
     <span class="footer-license">CC0 photos · MIT code</span>
   </footer>
