@@ -66,8 +66,8 @@ function onStripeClick(cell: SkyCell): void {
 </template>
 
 <style scoped>
-.color-band { display: flex; flex-direction: column; gap: 2rem; }
-.year-band { display: flex; flex-direction: column; gap: 0.5rem; }
+.color-band { display: flex; flex-direction: column; gap: 2rem; width: 100%; }
+.year-band { display: flex; flex-direction: column; gap: 0.5rem; width: 100%; }
 .year-label {
   font-size: 0.85rem;
   font-variant: small-caps;
@@ -75,15 +75,32 @@ function onStripeClick(cell: SkyCell): void {
   color: var(--ig-fg-faint);
   margin: 0;
 }
-.stripes { display: flex; height: 80px; gap: 0; }
+.stripes {
+  display: flex;
+  height: 80px;
+  gap: 1px;
+  width: 100%;
+  background: rgba(127, 127, 127, 0.05);
+  border: 1px solid var(--ig-fg-faint);
+  border-color: rgba(127, 127, 127, 0.2);
+}
 .stripe {
   flex: 1;
   border: none;
   padding: 0;
-  background: transparent;
+  background: var(--ig-fg-faint);
+  opacity: 0.12;
   cursor: default;
   min-width: 0;
 }
-.stripe.has-photo, .stripe.today-with-photo { cursor: pointer; }
-.stripe.gap { background: transparent; }
+.stripe.has-photo, .stripe.today-with-photo {
+  cursor: pointer;
+  opacity: 1;
+}
+.stripe.gap { background: var(--ig-fg-faint); opacity: 0.18; }
+.stripe.future { background: var(--ig-fg-faint); opacity: 0.06; }
+.stripe.today-empty {
+  background: var(--ig-yellow);
+  opacity: 0.4;
+}
 </style>
