@@ -43,7 +43,7 @@ A single author, photographing daily, committing photos via a local CLI. Visitor
 - **Local path:** `/Users/rubberduck/GitHub/momentmaker/photos`
 - **Remote:** `git@github.com:momentmaker/ig.git`
 - **Domain:** `ig.fz.ax` (CNAME → GitHub Pages, DNS via Cloudflare)
-- **GCS buckets (already created):** `sky-photos`, `count-photos`
+- **Photo storage:** `/photos/sky/` and `/photos/count/` in the repo. Served via [jsDelivr](https://www.jsdelivr.com/) git CDN at `https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/...`. No external accounts.
 - **Spec directory mirrors fz.ax:** `docs/superpowers/specs/`
 
 ## Practices
@@ -183,7 +183,7 @@ photos/
     {
       "type": "sky",
       "date": "2026-05-03",
-      "url": "https://storage.googleapis.com/sky-photos/2026-05-03.jpg",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-03.jpg",
       "w": 1600,
       "h": 1200,
       "color": "#a8c4e6",
@@ -193,7 +193,7 @@ photos/
       "type": "count",
       "n": 87,
       "date": "2026-05-03",
-      "url": "https://storage.googleapis.com/count-photos/087-2026-05-03.jpg",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/087-2026-05-03.jpg",
       "w": 1600,
       "h": 1200,
       "whisper": "parking sign in astoria"
@@ -223,7 +223,7 @@ sharp .stats() dominant color (sky only)
     ↓
 solstice check (sky only)
     ↓
-GCS upload to sky-photos/ or count-photos/, immutable cache
+write to /photos/sky/ or /photos/count/ (committed to git, served via jsDelivr)
     ↓
 append manifest.json entry, sorted on write
     ↓
@@ -257,7 +257,7 @@ The manifest is read at **build time** (Node-side import in route generators), a
 | Image pipeline | `sharp` | resize + dominant-color via `.stats()` |
 | EXIF | `exiftool-vendored` | read date, then strip all tags |
 | HEIC | `heic-convert` | iPhone reality |
-| Upload | `@google-cloud/storage` | direct, official SDK |
+| Photo storage | filesystem write to `/photos/<type>/` + jsDelivr CDN | photos travel with the repo, no external accounts |
 | Tests | Vitest + happy-dom | mirrors fz.ax |
 | Hosting | GitHub Pages, custom domain | mirrors fz.ax |
 | Runtime third-party libs | zero outside Vue/Nuxt core | mirrors fz.ax soul |
@@ -344,7 +344,7 @@ pnpm add-sky <photo-path> [--date YYYY-MM-DD] [--push]
 pnpm add-count <number> <photo-path> [--whisper "text"] [--date YYYY-MM-DD] [--push]
 pnpm add-sky --dir ./inbox/                        # batch — folder of photos
 pnpm remove <type> <id> [--push]                   # explicit deletion ceremony
-pnpm doctor                                        # validate manifest, check GCS, report orphans/missing
+pnpm verify                                        # validate manifest schema + counts
 pnpm regen-feed                                    # rebuild /feed.json from manifest
 ```
 
@@ -359,43 +359,27 @@ EXIF must be read **before** any format conversion (HEIC → JPEG would otherwis
 5. sharp resize: max edge 1600px, JPEG q80, target ~1mb (retry q70 → q60 if oversize).
 6. sharp `.stats()` → dominant color → hex string (sky only).
 7. Solstice check — is photo date one of the four mile-marker days in author timezone? → `solstice: true` (sky only). Dates come from a deterministic table covering 2024–2050 (vernal equinox, summer solstice, autumnal equinox, winter solstice), shared between the CLI and the runtime composable via a single source module at `utils/solstice.ts`.
-8. Upload to GCS:
-   - sky → `sky-photos/YYYY-MM-DD.jpg`
-   - count → `count-photos/NNN-YYYY-MM-DD.jpg` (3-digit zero-pad)
-   - `Cache-Control: public, max-age=31536000, immutable`
+8. Write to repo:
+   - sky → `photos/sky/YYYY-MM-DD.jpg`
+   - count → `photos/count/NNN-YYYY-MM-DD.jpg` (3-digit zero-pad)
+   - URL stored in manifest: `https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/<type>/<filename>`
 9. Append manifest entry, sorted on write.
 10. `git add data/manifest.json && git commit -m "<type>: <id>"`.
 11. If `--push`: `git push`.
 
 ### Auth
 
-- Service account JSON at `~/.config/ig-fz-ax/sa.json` (NOT in repo).
-- Path overridable via `IG_SA_PATH` env var.
-- `.gitignore` blanket-excludes service account JSONs.
-- README documents how to create the service account and bucket policies.
+None required. Photos commit directly to the repo. The CLI runs locally with no external credentials.
 
-### Bucket policies (one-time, manual, documented in README)
+### Storage
 
-```bash
-# Both buckets — public reads
-gsutil iam ch allUsers:objectViewer gs://sky-photos
-gsutil iam ch allUsers:objectViewer gs://count-photos
+Photos live in the repo at `/photos/<type>/<filename>.jpg`. They are served via the jsDelivr git CDN at:
 
-# Uniform bucket-level access
-gsutil ubla set on gs://sky-photos
-gsutil ubla set on gs://count-photos
-
-# CORS
-gsutil cors set cors.json gs://sky-photos
-gsutil cors set cors.json gs://count-photos
+```
+https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/<type>/<filename>.jpg
 ```
 
-`cors.json`:
-```json
-[{"origin":["https://ig.fz.ax"],"method":["GET"],"responseHeader":["Cache-Control"],"maxAgeSeconds":3600}]
-```
-
-Object listing remains disabled (default). Visitors can fetch known URLs from the manifest but cannot enumerate the bucket contents.
+jsDelivr's `@latest` tag picks up new commits with ~12h cache lag, acceptable for a daily-cadence project. The repo retains canonical bytes; jsDelivr is the public-facing CDN. GitHub Pages itself serves the rendered Nuxt site, NOT the photos — `.output/public/` does not include `/photos/`.
 
 ### Validation rules
 
@@ -411,7 +395,7 @@ Object listing remains disabled (default). Visitors can fetch known URLs from th
 ### Pre-commit hook (project-local)
 
 - Verify `data/manifest.json` is valid JSON.
-- Verify each entry's URL points to one of the configured buckets (string check, no fetch).
+- Verify each entry's URL starts with the project's jsDelivr base prefix (string check, no fetch).
 - Block commit if `data/manifest.json` references local file paths.
 
 ### Tests (Vitest)
@@ -448,7 +432,7 @@ Deploy lands ~30–60s after push. No manual steps after `pnpm add-sky photo.jpg
 ### Cost estimate
 
 - **Storage:** 5GB free tier. ~1mb per photo × 365 sky/yr × ~10yr + 217 count = ~3.8GB after a decade. Within free.
-- **Egress:** 1GB/mo free, then ~$0.12/GB. If site stays low-traffic, free. If traffic spikes, add Cloudflare proxy in front of bucket later (free egress through CF).
+- **Egress:** $0. jsDelivr serves photos for free with no bandwidth caps.
 - **GitHub Pages:** free for public repos.
 
 ## fz.ax integration
@@ -465,7 +449,7 @@ No runtime cross-fetching, no shared state, no shared service worker. Two static
 Each stage = one tag, one PR, multi-round adversarial review (mirroring the fz.ax process).
 
 1. **Stage 1 — Foundations.** Repo init, Nuxt scaffold, TypeScript config, lint, test, basic homepage tile, deploy pipeline. End-to-end deploy of a placeholder site to `ig.fz.ax`.
-2. **Stage 2 — CLI + pipeline.** `pnpm add-sky` and `pnpm add-count` working with EXIF strip, GCS upload, manifest append, commit. Validate against ~5 real sky photos and ~3 real count photos.
+2. **Stage 2 — CLI + pipeline.** `pnpm add-sky` and `pnpm add-count` working with EXIF strip, repo write, manifest append, commit. Validate against real photos.
 3. **Stage 3 — Sky page.** Calendar grid, color-band toggle, dominant color, lightbox, permalinks. Solstice halo logic.
 4. **Stage 4 — Count page.** 217-hex centered-hex layout, spiral algorithm, lightbox, permalinks, whisper display.
 5. **Stage 5 — Cross-cutting polish.** Solstice/equinox global treatment, JSON feed, sitemap, og:image, mobile-first refinements, accessibility pass, fz.ax footer link change.
