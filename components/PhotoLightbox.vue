@@ -56,12 +56,14 @@ watch(() => props.entry, (e) => {
       ←
     </button>
     <figure class="lightbox-figure">
-      <div class="lightbox-photo-frame">
-        <img
-          :src="entry.url"
-          :alt="entry.alt"
-          class="lightbox-photo"
-        >
+      <div class="lightbox-photo-outer">
+        <div class="lightbox-photo-frame">
+          <img
+            :src="entry.url"
+            :alt="entry.alt"
+            class="lightbox-photo"
+          >
+        </div>
       </div>
       <figcaption class="lightbox-caption">{{ entry.caption }}</figcaption>
     </figure>
@@ -94,20 +96,24 @@ watch(() => props.entry, (e) => {
   display: flex; flex-direction: column; align-items: center; gap: 1rem;
   max-width: 90vw; max-height: 90vh;
 }
-.lightbox-photo-frame {
+/* Outer hex is the yellow ring (background color showing through the gap). */
+.lightbox-photo-outer {
   width: min(80vh, 80vw);
   aspect-ratio: 1;
+  background: var(--ig-yellow);
+  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Inner hex slightly smaller — same proportional clip on a 99% box. The
+   gap between outer and inner reveals the yellow ring. */
+.lightbox-photo-frame {
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
   clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   overflow: hidden;
   display: block;
-  /* Stacked drop-shadows fake a hex outline that follows the clip-path edge.
-     Four 1-pixel shadows in N/S/E/W form a continuous 1px ring. Two layers
-     of three sub-pixel offsets give a softer 2px ring. */
-  filter:
-    drop-shadow(2px 0 0 var(--ig-yellow))
-    drop-shadow(-2px 0 0 var(--ig-yellow))
-    drop-shadow(0 2px 0 var(--ig-yellow))
-    drop-shadow(0 -2px 0 var(--ig-yellow));
 }
 .lightbox-photo {
   width: 100%;
