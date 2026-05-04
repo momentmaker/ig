@@ -1,5 +1,6 @@
 #!/usr/bin/env tsx
 import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
 import { processPhoto } from './lib/pipeline'
 import { uploadObject, type MinimalStorage } from './lib/gcs'
 import { loadManifest, saveManifest } from './lib/manifest'
@@ -11,7 +12,6 @@ import { Storage } from '@google-cloud/storage'
 export interface AddSkyOptions {
   photoPath: string
   date?: string
-  push?: boolean
   manifestPath?: string
   storage?: MinimalStorage
   config?: IgConfig
@@ -23,18 +23,37 @@ function resolveDate(now: Date, tz: string): string {
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
 
+function assertValidDate(date: string): void {
+  if (!DATE_RE.test(date)) {
+    throw new Error(`invalid date "${date}", expected YYYY-MM-DD`)
+  }
+  const d = new Date(`${date}T00:00:00Z`)
+  if (Number.isNaN(d.getTime()) || d.toISOString().slice(0, 10) !== date) {
+    throw new Error(`invalid date "${date}", expected real YYYY-MM-DD`)
+  }
+}
+
 export async function runAddSky(opts: AddSkyOptions): Promise<SkyEntry> {
   const config = opts.config ?? loadConfig()
   const manifestPath = opts.manifestPath ?? 'data/manifest.json'
   const storage = opts.storage ?? (new Storage() as unknown as MinimalStorage)
 
+  // Fast-path: when --date is supplied we can detect duplicates before the
+  // expensive image pipeline runs. Without --date the manifest check happens
+  // after processPhoto since we need EXIF to derive the date.
+  if (opts.date !== undefined) {
+    assertValidDate(opts.date)
+    const m = loadManifest(manifestPath)
+    if (m.entries.some(e => e.type === 'sky' && e.date === opts.date)) {
+      throw new Error(`duplicate sky entry for date ${opts.date}`)
+    }
+  }
+
   const photo = readFileSync(opts.photoPath)
   const processed = await processPhoto(photo)
 
   const date = opts.date ?? processed.originalDate ?? resolveDate(new Date(), config.timezone)
-  if (!DATE_RE.test(date)) {
-    throw new Error(`invalid date "${date}", expected YYYY-MM-DD`)
-  }
+  assertValidDate(date)
 
   const manifest = loadManifest(manifestPath)
   if (manifest.entries.some(e => e.type === 'sky' && e.date === date)) {
@@ -61,7 +80,7 @@ export async function runAddSky(opts: AddSkyOptions): Promise<SkyEntry> {
 async function main(): Promise<void> {
   const args = process.argv.slice(2)
   if (args.length === 0) {
-    console.error('usage: pnpm add-sky <photo-path> [--date YYYY-MM-DD] [--push]')
+    console.error('usage: pnpm add-sky <photo-path> [--date YYYY-MM-DD]')
     process.exit(1)
   }
   const photoPath = args[0]!
@@ -69,14 +88,14 @@ async function main(): Promise<void> {
   const date = dateIdx >= 0 ? args[dateIdx + 1] : undefined
   try {
     const entry = await runAddSky({ photoPath, date })
-    console.log(`✓ sky added for ${entry.date}: ${entry.url}`)
+    console.log(`sky added for ${entry.date}: ${entry.url}`)
   }
   catch (err) {
-    console.error(`✗ ${(err as Error).message}`)
+    console.error((err as Error).message)
     process.exit(1)
   }
 }
 
-if (process.argv[1]?.endsWith('add-sky.ts') || process.argv[1]?.endsWith('add-sky.js')) {
+if (process.argv[1] !== undefined && process.argv[1] === fileURLToPath(import.meta.url)) {
   await main()
 }
