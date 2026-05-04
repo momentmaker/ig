@@ -78,6 +78,10 @@ function isToday(cell: SkyCell): boolean {
   return cell.kind === 'today-with-photo' || cell.kind === 'today-empty'
 }
 
+function isSolsticeCell(cell: SkyCell): boolean {
+  return (cell.kind === 'has-photo' || cell.kind === 'today-with-photo') && cell.entry.solstice
+}
+
 function onCellClick(cell: SkyCell): void {
   if (cell.kind === 'has-photo' || cell.kind === 'today-with-photo') {
     emit('photo-click', cell.entry)
@@ -100,18 +104,23 @@ function onCellClick(cell: SkyCell): void {
         <span class="week-range">{{ row.rangeLabel }}</span>
       </header>
       <div class="week-hexes">
-        <button
+        <span
           v-for="cell in row.cells"
           :key="cell.date"
-          type="button"
-          class="hex-cell"
-          :class="[cellClass(cell), { today: isToday(cell) }]"
-          :style="cellStyle(cell)"
-          :data-date="cell.date"
-          :disabled="cell.kind !== 'has-photo' && cell.kind !== 'today-with-photo'"
-          :title="cell.date"
-          @click="onCellClick(cell)"
-        />
+          class="hex-frame"
+          :class="{ today: isToday(cell), 'solstice-halo': isSolsticeCell(cell) }"
+        >
+          <button
+            type="button"
+            class="hex-cell"
+            :class="[cellClass(cell), { today: isToday(cell) }]"
+            :style="cellStyle(cell)"
+            :data-date="cell.date"
+            :disabled="cell.kind !== 'has-photo' && cell.kind !== 'today-with-photo'"
+            :title="cell.date"
+            @click="onCellClick(cell)"
+          />
+        </span>
       </div>
     </article>
   </div>
@@ -152,34 +161,44 @@ function onCellClick(cell: SkyCell): void {
   gap: 4px;
   justify-content: end;
 }
-.hex-cell {
+.hex-frame {
   width: 28px;
   height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+}
+.hex-frame.today {
+  background: var(--ig-yellow);
+  animation: breathe 2.4s ease-in-out infinite;
+}
+.hex-frame.solstice-halo { background: var(--ig-gold); }
+.hex-cell {
+  width: calc(100% - 4px);
+  height: calc(100% - 4px);
   border: none;
   background: transparent;
   padding: 0;
   cursor: default;
   clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
-  position: relative;
+}
+.hex-frame.today .hex-cell,
+.hex-frame.solstice-halo .hex-cell {
+  width: calc(100% - 6px);
+  height: calc(100% - 6px);
 }
 .hex-cell.has-photo, .hex-cell.today-with-photo { cursor: pointer; }
 .hex-cell.gap { background: var(--ig-fg-faint); opacity: 0.18; }
 .hex-cell.future { background: var(--ig-fg-faint); opacity: 0.08; }
 .hex-cell.today-empty { background: var(--ig-fg-faint); opacity: 0.35; }
-.hex-cell.today {
-  box-shadow: inset 0 0 0 2px var(--ig-yellow);
-  animation: breathe 2.4s ease-in-out infinite;
-}
-.hex-cell.solstice-halo { box-shadow: inset 0 0 0 2px var(--ig-gold); }
-.hex-cell.today.solstice-halo {
-  box-shadow: inset 0 0 0 2px var(--ig-yellow), inset 0 0 0 4px var(--ig-gold);
-}
 @keyframes breathe {
   0%, 100% { opacity: 1; }
   50% { opacity: 0.55; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hex-cell.today { animation: none; }
+  .hex-frame.today { animation: none; }
 }
 @media (max-width: 600px) {
   .week-row {
