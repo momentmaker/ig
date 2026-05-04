@@ -1,0 +1,65 @@
+:root {
+  --ig-yellow: #F7B808;
+  --ig-blue: #0847F7;
+  --ig-bg: #ffffff;
+  --ig-fg: #111111;
+  --ig-fg-faint: #888888;
+  --ig-gold: #d4a017;
+
+  --ig-font-body: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+  --ig-font-display: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+
+  --ig-tile-size-desktop: 360px;
+  --ig-tile-size-mobile: 280px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --ig-bg: #0d0d0d;
+    --ig-fg: #f7f7f0;
+    --ig-fg-faint: #777777;
+  }
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--ig-bg);
+  color: var(--ig-fg);
+  font-family: var(--ig-font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--ig-blue);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Hex clip-path — flat-top regular hexagon */
+.hex-clip {
+  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+}
+
+/* Long Now footer — leading zero accent */
+.long-now-zero {
+  color: var(--ig-yellow);
+}
+
+/* Reduced-motion support — required by spec accessibility section */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
