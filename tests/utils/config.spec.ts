@@ -1,0 +1,71 @@
+import { describe, it, expect } from 'vitest'
+import { loadConfig, DEFAULT_CONFIG, type IgConfig } from '~/utils/config'
+import { writeFileSync, mkdtempSync, rmSync } from 'node:fs'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+
+function makeTempConfig(contents: object): string {
+  const dir = mkdtempSync(join(tmpdir(), 'ig-config-'))
+  const path = join(dir, 'config.json')
+  writeFileSync(path, JSON.stringify(contents))
+  return path
+}
+
+describe('loadConfig', () => {
+  it('returns the parsed config when the file exists', () => {
+    const path = makeTempConfig({
+      timezone: 'America/Los_Angeles',
+      skyBucket: 'my-sky',
+      countBucket: 'my-count',
+    })
+    const cfg = loadConfig(path)
+    expect(cfg.timezone).toBe('America/Los_Angeles')
+    expect(cfg.skyBucket).toBe('my-sky')
+    expect(cfg.countBucket).toBe('my-count')
+    rmSync(path, { force: true })
+  })
+
+  it('returns DEFAULT_CONFIG when the file does not exist', () => {
+    const cfg = loadConfig('/no/such/file.json')
+    expect(cfg).toEqual(DEFAULT_CONFIG)
+  })
+
+  it('throws when the file exists but is not valid JSON', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'ig-config-'))
+    const path = join(dir, 'config.json')
+    writeFileSync(path, '{not json')
+    expect(() => loadConfig(path)).toThrow(/parse/i)
+    rmSync(dir, { recursive: true, force: true })
+  })
+
+  it('throws when timezone is missing', () => {
+    const path = makeTempConfig({ skyBucket: 'a', countBucket: 'b' })
+    expect(() => loadConfig(path)).toThrow(/timezone/i)
+    rmSync(path, { force: true })
+  })
+
+  it('throws when timezone is not a recognized IANA name', () => {
+    const path = makeTempConfig({
+      timezone: 'Mars/Olympus_Mons',
+      skyBucket: 'a',
+      countBucket: 'b',
+    })
+    expect(() => loadConfig(path)).toThrow(/timezone/i)
+    rmSync(path, { force: true })
+  })
+
+  it('uses default bucket names if both are missing', () => {
+    const path = makeTempConfig({ timezone: 'UTC' })
+    const cfg = loadConfig(path)
+    expect(cfg.skyBucket).toBe(DEFAULT_CONFIG.skyBucket)
+    expect(cfg.countBucket).toBe(DEFAULT_CONFIG.countBucket)
+    rmSync(path, { force: true })
+  })
+
+  it('exposes a typed shape', () => {
+    const cfg: IgConfig = DEFAULT_CONFIG
+    expect(typeof cfg.timezone).toBe('string')
+    expect(typeof cfg.skyBucket).toBe('string')
+    expect(typeof cfg.countBucket).toBe('string')
+  })
+})
