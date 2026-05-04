@@ -26,7 +26,7 @@ These are the constraints that protect the practice. They are not negotiable in 
 
 1. **Public artifact, no social.** Photos are viewable by anyone. There are no comments, no likes, no follower counts, no sign-in, no analytics, no tracking, no third-party scripts.
 2. **CC0 photos.** All photos are released to the public domain via CC0-1.0. Visitors may reuse them freely without attribution.
-3. **Constraint is the feature.** One sky photo per local day. No replace. No backfill. Numbers are exactly 0–216. Whispers (count only) are exactly one short sentence (≤ 240 chars).
+3. **Constraint is the feature.** One sky photo per author-local day. No replace. No backfill. Numbers are exactly 0–216. Whispers (count only) are optional and capped at one short sentence (max 240 chars).
 4. **Static-only deploy.** The site is built with `nuxt generate` and served from GitHub Pages. No SSR. No serverless. No backend. Not even one function.
 5. **Sibling aesthetic to fz.ax.** Yellow `#F7B808` and blue `#0847F7` carry over. The hexagon glyph vocabulary (`⬢ ⏣ ⬡`) carries over. Chrome is quieter than fz.ax; photographs do the talking.
 6. **Privacy at upload.** ALL EXIF metadata is stripped before upload — GPS, device, timestamps, every tag. The photo's date survives only via filename and manifest entry. Original dates are read from EXIF before the strip.
@@ -50,13 +50,15 @@ A single author, photographing daily, committing photos via a local CLI. Visitor
 
 ### Sky
 
-**Capture rule.** A single photograph of the sky per local calendar day. Composition is unconstrained: dawn, noon, dusk, clear, cloudy, urban, rural — all valid. The discipline is the daily noticing, not the artistry.
+**Capture rule.** A single photograph of the sky per author-local calendar day. Composition is unconstrained: dawn, noon, dusk, clear, cloudy, urban, rural — all valid. The discipline is the daily noticing, not the artistry.
+
+**Author timezone.** Date derivation uses a single configured author timezone (`config.timezone` in `~/.config/ig-fz-ax/config.json`, e.g., `"America/New_York"`), not the CLI machine's local timezone. Travel does not break duplicate detection: a photo taken in Tokyo at 11pm is still resolved against the author's home-day. The runtime composable `useSolstice` and the calendar grid use the same timezone (read from a build-time-injected constant) so display matches CLI semantics.
 
 **Validation.** The CLI rejects a second photo for the same date. There is no replace flag and no backfill flag. Missed days remain blank forever.
 
 **Solstice marking.** When a photo's date is one of the four astronomical mile-marker days (vernal equinox, summer solstice, autumnal equinox, winter solstice), its manifest entry sets `solstice: true`. The site renders a permanent gold halo on that cell across grid, lightbox, and og:image overlay.
 
-**Display — `/sky` calendar.** A 52-week × 7-day calendar grid per year, stacked descending (latest year top). Each cell renders one of:
+**Display — `/sky` calendar.** An ISO-week × 7-day calendar grid per year (53 columns to accommodate ISO years that have a week 53; week 53 column is hidden in years that have only 52), stacked descending (latest year top). Years are partitioned by ISO-week-year (a December 29–31 photo may belong to ISO year+1's row, matching `getISOWeek`/`getISOWeekYear` semantics). Each cell renders one of:
 
 - has photo → tinted thumbnail in dominant color
 - no photo, past → faint `⬡` outline (gap, kept honest)
@@ -103,12 +105,13 @@ Each hex cell:
 
 Header shows progress: `23 / 217 found`.
 
-**Spiral algorithm.** Start at center (n=0). For each subsequent ring r (1..8):
-1. Step out one cell in a fixed direction (e.g., NE corner of ring)
-2. Walk the ring clockwise through `6r` cells
-3. Assign sequential numbers as you go
+**Spiral algorithm.** Coordinates are axial `(q, r)` with the center at `(0, 0)`. Number 0 = center hex. For each subsequent ring `R ∈ {1..8}`:
 
-The algorithm is deterministic, has stable test fixtures, and renders identically across browsers.
+1. The ring contains exactly `6R` cells, totalling `1 + 6 + 12 + … + 48 = 217` cells across rings 0–8.
+2. Numbering starts at the east-most cell of the ring (axial `(R, 0)`) and walks the ring in a single fixed rotational direction through all 6 sides (`R` steps per side).
+3. The exact direction (CW vs CCW) and per-side neighbour vector are defined once in `utils/spiral.ts`. The choice does not matter for the spec; what matters is that the same convention is used at build time (when prerendering) and at runtime (when rendering).
+
+A golden-fixture test in `spiral.test.ts` asserts the placement of all 217 numbers against a checked-in coordinate map; any change to `utils/spiral.ts` that reorders cells must update the fixture deliberately.
 
 **Permalink.** `/count/N` is prerendered for every found number. Renders standalone with photo, number (large), date, whisper if present, prev/next chevrons (numerical neighbors that exist).
 
@@ -242,7 +245,7 @@ GitHub Pages rebuilds → live ~30s later
 - `og:image` per permalink → photo URL
 - `og:title` / `og:description` per permalink
 
-The site requires no JavaScript to view. The lightbox URL sync uses History API as enhancement only; the same component renders at the permalink URL as a full standalone page.
+The manifest is read at **build time** (Node-side import in route generators), and the resulting data is inlined into the prerendered HTML. The site requires no JavaScript to view: every grid cell, every permalink, every og:image is already in the static HTML. The lightbox URL sync uses the History API as a progressive enhancement only; with JS off, photo clicks navigate directly to the permalink page (same content).
 
 ### Stack
 
@@ -291,7 +294,9 @@ Below tiles: tiny line — `practices · 02026` (Long Now zero in yellow). No na
 
 ### Lightbox
 
-Modal overlay opens on photo click. URL updates via `history.pushState` to the entry's permalink. ESC, click backdrop, or browser back closes (URL pops back to grid). Direct visit to a permalink renders the same content as a full standalone page (same component, no underlying grid).
+Modal overlay opens on photo click. The first open uses `history.pushState` to push the entry's permalink onto the history stack. Prev/next navigation within the open lightbox uses `history.replaceState` so the back button always returns to the grid in one step (rather than walking through every photo viewed). ESC, click backdrop, or browser back all close the lightbox.
+
+Direct visit to a permalink (cold load, refresh, or shared link) renders the same content as a full standalone page — same component, no underlying grid behind it. The page is fully prerendered and works without JavaScript; URL sync is enhancement only.
 
 Content:
 - Photo (max-height 90vh, contained, never cropped)
@@ -309,8 +314,8 @@ Content:
 
 - Calendar cells: minimum 44 × 44 tap target on mobile
 - Hex tiles: phone width fits one tile per row + padding
-- Lightbox: swipe left/right = prev/next entry
-- Lightbox: bottom-sheet style on phone (slides up from bottom)
+- Lightbox on phone: bottom-sheet style (slides up from bottom on open)
+- Lightbox gestures: **horizontal** swipe left/right = prev/next entry; **vertical** swipe down past a 60px threshold = dismiss. Gesture direction is locked at first 12px of movement to avoid mode confusion.
 
 ### Accessibility
 
@@ -320,13 +325,15 @@ Content:
 
 ### Solstice/equinox treatment
 
-When the current local date is a solstice or equinox, all routes transform:
-- Background: dark navy `#0a1438` (matches fz.ax F2.5)
+When the current author-timezone date is a solstice or equinox, all routes transform:
+- Background: `#1a1a2e` (exact match to fz.ax F2.5)
+- Foreground text: `#f7f7f0` (exact match to fz.ax F2.5)
 - Hex tile glow: 5.5s slow cycle (vs 2.4s normal)
 - Headers: small-caps weight up
-- One-line note in footer: `solstice · 21 jun 02026` (or appropriate)
+- One-line note in footer: `<season> · <DD MMM 0YYYY>` (e.g., `summer solstice · 21 jun 02026`)
+- Body class one of: `solstice-vernal`, `solstice-summer`, `solstice-autumnal`, `solstice-winter` (mirroring fz.ax CSS hooks)
 
-The treatment is active for the entire local calendar day, then reverts.
+The treatment is active for the entire author-timezone calendar day, then reverts.
 
 ## CLI & image pipeline
 
@@ -343,13 +350,15 @@ pnpm regen-feed                                    # rebuild /feed.json from man
 
 ### Pipeline (per photo)
 
-1. Detect format. HEIC → libheif convert to JPEG.
-2. exiftool read `DateTimeOriginal` → photo date (else `--date` flag, else today).
-3. exiftool strip ALL tags.
-4. sharp resize: max edge 1600px, JPEG q80, target ~1mb (retry q70 → q60 if oversize).
-5. sharp `.stats()` → dominant color → hex string (sky only).
-6. Solstice check — is photo date one of the four mile-marker days? → `solstice: true` (sky only). Dates are computed from a deterministic table covering 2024–2050 (vernal equinox, summer solstice, autumnal equinox, winter solstice), shared between the CLI (`scripts/lib/solstice.ts`) and the runtime composable (`composables/useSolstice.ts`) via a single source module in `utils/solstice.ts`.
-7. Validate against manifest (no duplicate date / number, range checks).
+EXIF must be read **before** any format conversion (HEIC → JPEG would otherwise drop the original metadata).
+
+1. exiftool read `DateTimeOriginal` from the original file → photo date (else `--date` flag, else "today" resolved in author timezone).
+2. Resolve photo date in author timezone (`config.timezone`); validate against manifest (no duplicate date / number, range checks).
+3. Detect format. HEIC → libheif convert to JPEG (working copy in temp dir).
+4. exiftool strip ALL tags from the working JPEG.
+5. sharp resize: max edge 1600px, JPEG q80, target ~1mb (retry q70 → q60 if oversize).
+6. sharp `.stats()` → dominant color → hex string (sky only).
+7. Solstice check — is photo date one of the four mile-marker days in author timezone? → `solstice: true` (sky only). Dates come from a deterministic table covering 2024–2050 (vernal equinox, summer solstice, autumnal equinox, winter solstice), shared between the CLI and the runtime composable via a single source module at `utils/solstice.ts`.
 8. Upload to GCS:
    - sky → `sky-photos/YYYY-MM-DD.jpg`
    - count → `count-photos/NNN-YYYY-MM-DD.jpg` (3-digit zero-pad)
@@ -392,7 +401,7 @@ Object listing remains disabled (default). Visitors can fetch known URLs from th
 
 | Practice | Rule | Error |
 |---|---|---|
-| sky | one entry per local date | `sky entry already exists for <date>` |
+| sky | one entry per author-timezone date | `sky entry already exists for <date>` |
 | count | `n ∈ [0, 216]` | `count must be 0-216` |
 | count | one entry per number | `count <n> already exists (found <date>)` |
 | count | whisper ≤ 240 chars | `whisper too long: <N> chars` |
@@ -503,6 +512,11 @@ Listing these protects the soul:
 | og:image | Per permalink, set to the photo URL. |
 | Render strategy | Pre-render every route via `nuxt generate`. |
 | DOB | Removed entirely. |
+| Timezone | Single configured author timezone (`config.timezone` in `~/.config/ig-fz-ax/config.json`), used by both CLI and runtime. |
+| EXIF read order | Read original EXIF before any HEIC→JPEG conversion. Strip after. |
+| Solstice colors | Background `#1a1a2e`, foreground `#f7f7f0`, body classes `solstice-{vernal,summer,autumnal,winter}` — exact match to fz.ax F2.5. |
+| ISO weeks | Calendar uses ISO-week semantics (53 columns, year boundary follows ISO-week-year). |
+| Lightbox history | First open: `pushState`. Prev/next: `replaceState`. Back button always returns to grid in one step. |
 
 ---
 
