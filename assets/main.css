@@ -3,7 +3,7 @@
   --ig-blue: #0847F7;
   --ig-bg: #ffffff;
   --ig-fg: #111111;
-  --ig-fg-faint: #888888;
+  --ig-fg-faint: #666666;
   --ig-gold: #d4a017;
 
   --ig-font-body: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
@@ -45,9 +45,9 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Hex clip-path — flat-top regular hexagon */
+/* Hex clip-path — pointy-top regular hexagon, fills a square box exactly. Matches fz.ax sibling. */
 .hex-clip {
-  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
 
 /* Long Now footer — leading zero accent */
