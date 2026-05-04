@@ -15,6 +15,9 @@ function manifestRoutes(): string[] {
       const [y, m, d] = entry.date.split('-')
       out.push(`/sky/${y}/${m}/${d}`)
     }
+    else if (entry.type === 'count') {
+      out.push(`/count/${entry.n}`)
+    }
   }
   return out
 }
@@ -26,7 +29,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'static',
     prerender: {
-      routes: ['/', '/sky', ...manifestRoutes()],
+      routes: ['/', '/sky', '/count', ...manifestRoutes()],
       crawlLinks: false,
       failOnError: true
     }
