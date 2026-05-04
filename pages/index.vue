@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { currentYear } from '~/utils/longNow'
+import { useManifest } from '~/composables/useManifest'
 
 useHead({
   title: 'ig.fz.ax',
@@ -7,10 +8,13 @@ useHead({
 
 const year = currentYear()
 
-// Stage 1 placeholder — Stages 3-4 derive practices from the manifest.
+const manifest = useManifest()
+const skyDays = manifest.entries.filter(e => e.type === 'sky').length
+const countFound = manifest.entries.filter(e => e.type === 'count').length
+
 const practices = [
-  { name: 'sky', metric: '0 days', href: '/sky' },
-  { name: 'count', metric: '0 / 217', href: '/count' },
+  { name: 'sky', metric: `${skyDays} day${skyDays === 1 ? '' : 's'}`, href: '/sky' },
+  { name: 'count', metric: `${countFound} / 217`, href: '/count' },
 ] as const
 </script>
 
