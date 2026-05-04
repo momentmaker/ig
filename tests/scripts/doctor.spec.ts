@@ -40,7 +40,21 @@ describe('runDoctor', () => {
   it('reports errors for invalid manifest', () => {
     const path = tempManifest({ version: 99, license: 'CC0-1.0', entries: [] })
     const report = runDoctor({ manifestPath: path })
-    expect(report.errors.length).toBeGreaterThan(0)
+    expect(report.errors[0]).toMatch(/version must be 1/)
     rmSync(path, { force: true })
+  })
+
+  it('reports an error when the manifest file is missing', () => {
+    const report = runDoctor({ manifestPath: '/no/such/manifest.json' })
+    expect(report.errors[0]).toMatch(/ENOENT|no such file/i)
+  })
+
+  it('reports an error when the manifest is unparseable JSON', () => {
+    const dir = mkdtempSync(join(tmpdir(), 'ig-dr-'))
+    const path = join(dir, 'manifest.json')
+    writeFileSync(path, '{ not json')
+    const report = runDoctor({ manifestPath: path })
+    expect(report.errors[0]).toMatch(/JSON|Unexpected/i)
+    rmSync(dir, { recursive: true, force: true })
   })
 })

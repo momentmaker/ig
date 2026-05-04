@@ -33,7 +33,9 @@ export function runDoctor(opts: DoctorOptions = {}): DoctorReport {
 }
 
 function main(): void {
-  const report = runDoctor()
+  const manifestPath = 'data/manifest.json'
+  const report = runDoctor({ manifestPath })
+  console.log(`checking ${manifestPath}`)
   console.log(`sky entries:   ${report.skyCount}`)
   console.log(`count entries: ${report.countCount} / 217`)
   if (report.errors.length > 0) {
