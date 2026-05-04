@@ -45,9 +45,11 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Hex clip-path — pointy-top regular hexagon, fills a square box exactly. Matches fz.ax sibling. */
+/* Hex clip-path — true regular pointy-top hexagon inscribed in a square box.
+   Width 86.6% (= √3/2), centered. Matches the proportions of the Unicode ⬢
+   glyph fz.ax renders. */
 .hex-clip {
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
 }
 
 /* Long Now footer — leading zero accent */

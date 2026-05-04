@@ -97,7 +97,7 @@ watch(() => props.entry, (e) => {
 .lightbox-photo-frame {
   width: min(80vh, 80vw);
   aspect-ratio: 1;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   overflow: hidden;
   display: block;
 }

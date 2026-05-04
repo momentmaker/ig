@@ -159,7 +159,7 @@ function onCellClick(cell: SkyCell): void {
   background: transparent;
   padding: 0;
   cursor: default;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   position: relative;
 }
 .hex-cell.has-photo, .hex-cell.today-with-photo { cursor: pointer; }
