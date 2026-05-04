@@ -11,6 +11,7 @@
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
+    "remove": "tsx scripts/remove.ts",
     "postinstall": "nuxt prepare",
     "test": "vitest run",
     "test:watch": "vitest",
