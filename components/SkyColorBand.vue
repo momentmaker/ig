@@ -77,30 +77,32 @@ function onStripeClick(cell: SkyCell): void {
 }
 .stripes {
   display: flex;
-  height: 80px;
-  gap: 1px;
+  height: 100px;
+  gap: 0;
   width: 100%;
-  background: rgba(127, 127, 127, 0.05);
-  border: 1px solid var(--ig-fg-faint);
-  border-color: rgba(127, 127, 127, 0.2);
+  border: 1px solid rgba(127, 127, 127, 0.25);
 }
 .stripe {
   flex: 1;
   border: none;
   padding: 0;
-  background: var(--ig-fg-faint);
-  opacity: 0.12;
+  background: rgba(127, 127, 127, 0.35);
   cursor: default;
   min-width: 0;
 }
 .stripe.has-photo, .stripe.today-with-photo {
   cursor: pointer;
-  opacity: 1;
+  /* photo cells get inline background-color from dominant color; widen them
+     a bit so they read against the thin gap-day strips */
+  flex: 3;
+  outline: 1px solid rgba(0, 0, 0, 0.2);
+  outline-offset: -1px;
 }
-.stripe.gap { background: var(--ig-fg-faint); opacity: 0.18; }
-.stripe.future { background: var(--ig-fg-faint); opacity: 0.06; }
+.stripe.gap { background: rgba(127, 127, 127, 0.35); }
+.stripe.future { background: rgba(127, 127, 127, 0.1); }
 .stripe.today-empty {
   background: var(--ig-yellow);
-  opacity: 0.4;
+  opacity: 0.55;
+  flex: 2;
 }
 </style>
