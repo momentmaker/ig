@@ -56,11 +56,13 @@ watch(() => props.entry, (e) => {
       ←
     </button>
     <figure class="lightbox-figure">
-      <img
-        :src="entry.url"
-        :alt="entry.alt"
-        class="lightbox-photo"
-      >
+      <div class="lightbox-photo-frame">
+        <img
+          :src="entry.url"
+          :alt="entry.alt"
+          class="lightbox-photo"
+        >
+      </div>
       <figcaption class="lightbox-caption">{{ entry.caption }}</figcaption>
     </figure>
     <button
@@ -92,10 +94,17 @@ watch(() => props.entry, (e) => {
   display: flex; flex-direction: column; align-items: center; gap: 1rem;
   max-width: 90vw; max-height: 90vh;
 }
+.lightbox-photo-frame {
+  width: min(80vh, 80vw);
+  aspect-ratio: 1;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  overflow: hidden;
+  display: block;
+}
 .lightbox-photo {
-  max-width: 100%;
-  max-height: 80vh;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
   display: block;
 }
 .lightbox-caption {

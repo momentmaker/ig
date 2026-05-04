@@ -21,7 +21,7 @@ function todayInAuthorTz(): string {
 }
 const today = ref(todayInAuthorTz())
 
-const view = ref<'calendar' | 'colorband'>('calendar')
+const view = ref<'calendar' | 'colorband' | 'weeks'>('calendar')
 
 const sortedSkies = computed(() =>
   [...skyEntries.value].sort((a, b) => a.date.localeCompare(b.date)),
@@ -109,6 +109,14 @@ if (typeof window !== 'undefined') {
         >
           color band
         </button>
+        <button
+          type="button"
+          class="toggle-btn"
+          :class="{ active: view === 'weeks' }"
+          @click="view = 'weeks'"
+        >
+          weeks
+        </button>
       </div>
     </header>
 
@@ -119,6 +127,12 @@ if (typeof window !== 'undefined') {
       @photo-click="openPhoto"
     />
     <SkyColorBand
+      v-else-if="view === 'colorband'"
+      :entries="skyEntries"
+      :today="today"
+      @photo-click="openPhoto"
+    />
+    <SkyWeeksList
       v-else
       :entries="skyEntries"
       :today="today"

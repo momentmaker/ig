@@ -103,41 +103,42 @@ function onCellClick(cell: SkyCell | null): void {
 .week-col { display: grid; grid-template-rows: repeat(7, 1fr); gap: 3px; }
 .cell {
   aspect-ratio: 1;
-  border: 1px solid transparent;
+  border: none;
   background: transparent;
   padding: 0;
   cursor: default;
-  min-width: 10px;
-  min-height: 10px;
+  min-width: 12px;
+  min-height: 12px;
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  position: relative;
 }
 .cell.has-photo,
 .cell.today-with-photo {
   cursor: pointer;
-  border-color: transparent;
 }
 .cell.gap {
-  background: transparent;
-  border-color: var(--ig-fg-faint);
-  opacity: 0.45;
-}
-.cell.future {
-  background: transparent;
-  border-color: var(--ig-fg-faint);
+  background: var(--ig-fg-faint);
   opacity: 0.18;
 }
-.cell.today-empty {
-  background: transparent;
-  border-color: var(--ig-fg-faint);
-  opacity: 0.6;
+.cell.future {
+  background: var(--ig-fg-faint);
+  opacity: 0.08;
 }
-.cell.pad { background: transparent; border-color: transparent; }
+.cell.today-empty {
+  background: var(--ig-fg-faint);
+  opacity: 0.35;
+}
+.cell.pad { background: transparent; }
 .cell.today {
-  outline: 2px solid var(--ig-yellow);
-  outline-offset: 1px;
+  /* clip-path masks outline; use box-shadow inset for the today ring */
+  box-shadow: inset 0 0 0 2px var(--ig-yellow);
   animation: breathe 2.4s ease-in-out infinite;
 }
 .cell.solstice-halo {
-  box-shadow: 0 0 0 2px var(--ig-gold);
+  box-shadow: inset 0 0 0 2px var(--ig-gold);
+}
+.cell.today.solstice-halo {
+  box-shadow: inset 0 0 0 2px var(--ig-yellow), inset 0 0 0 4px var(--ig-gold);
 }
 @keyframes breathe {
   0%, 100% { opacity: 1; }
