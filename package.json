@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "preinstall": "npx -y only-allow pnpm",
+    "add-count": "tsx scripts/add-count.ts",
     "add-sky": "tsx scripts/add-sky.ts",
     "build": "nuxt build",
     "dev": "nuxt dev",
