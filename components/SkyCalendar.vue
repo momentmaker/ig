@@ -85,8 +85,8 @@ function onCellClick(cell: SkyCell | null): void {
 </template>
 
 <style scoped>
-.sky-calendar { display: flex; flex-direction: column; gap: 2rem; }
-.sky-year { display: flex; flex-direction: column; gap: 0.5rem; }
+.sky-calendar { display: flex; flex-direction: column; gap: 2rem; width: 100%; }
+.sky-year { display: flex; flex-direction: column; gap: 0.75rem; width: 100%; }
 .year-label {
   font-size: 0.85rem;
   font-variant: small-caps;
@@ -94,25 +94,43 @@ function onCellClick(cell: SkyCell | null): void {
   color: var(--ig-fg-faint);
   margin: 0;
 }
-.grid { display: grid; grid-template-columns: repeat(53, minmax(0, 1fr)); gap: 2px; }
-.week-col { display: grid; grid-template-rows: repeat(7, 1fr); gap: 2px; }
+.grid {
+  display: grid;
+  grid-template-columns: repeat(53, minmax(10px, 1fr));
+  gap: 3px;
+  width: 100%;
+}
+.week-col { display: grid; grid-template-rows: repeat(7, 1fr); gap: 3px; }
 .cell {
   aspect-ratio: 1;
-  border: none;
+  border: 1px solid transparent;
   background: transparent;
   padding: 0;
   cursor: default;
+  min-width: 10px;
+  min-height: 10px;
 }
 .cell.has-photo,
 .cell.today-with-photo {
   cursor: pointer;
+  border-color: transparent;
 }
 .cell.gap {
   background: transparent;
-  border: 1px solid var(--ig-fg-faint);
-  opacity: 0.25;
+  border-color: var(--ig-fg-faint);
+  opacity: 0.45;
 }
-.cell.future, .cell.pad { background: transparent; }
+.cell.future {
+  background: transparent;
+  border-color: var(--ig-fg-faint);
+  opacity: 0.18;
+}
+.cell.today-empty {
+  background: transparent;
+  border-color: var(--ig-fg-faint);
+  opacity: 0.6;
+}
+.cell.pad { background: transparent; border-color: transparent; }
 .cell.today {
   outline: 2px solid var(--ig-yellow);
   outline-offset: 1px;
@@ -123,7 +141,7 @@ function onCellClick(cell: SkyCell | null): void {
 }
 @keyframes breathe {
   0%, 100% { opacity: 1; }
-  50% { opacity: 0.5; }
+  50% { opacity: 0.55; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cell.today { animation: none; }
