@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ig.fz.ax/sitemap.xml
