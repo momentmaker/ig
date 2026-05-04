@@ -2,19 +2,17 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { processPhoto } from './lib/pipeline'
-import { uploadObject, type MinimalStorage } from './lib/gcs'
+import { savePhoto } from './lib/photo-store'
 import { loadManifest, saveManifest } from './lib/manifest'
 import { isSolstice } from '../utils/solstice'
 import type { IgConfig } from '../utils/config'
 import { loadConfig } from './lib/config-loader'
 import type { SkyEntry, Manifest } from '../utils/manifestSchema'
-import { Storage } from '@google-cloud/storage'
 
 export interface AddSkyOptions {
   photoPath: string
   date?: string
   manifestPath?: string
-  storage?: MinimalStorage
   config?: IgConfig
 }
 
@@ -37,11 +35,7 @@ function assertValidDate(date: string): void {
 export async function runAddSky(opts: AddSkyOptions): Promise<SkyEntry> {
   const config = opts.config ?? loadConfig()
   const manifestPath = opts.manifestPath ?? 'data/manifest.json'
-  const storage = opts.storage ?? (new Storage() as unknown as MinimalStorage)
 
-  // Fast-path: when --date is supplied we can detect duplicates before the
-  // expensive image pipeline runs. Without --date the manifest check happens
-  // after processPhoto since we need EXIF to derive the date.
   if (opts.date !== undefined) {
     assertValidDate(opts.date)
     const m = loadManifest(manifestPath)
@@ -61,8 +55,7 @@ export async function runAddSky(opts: AddSkyOptions): Promise<SkyEntry> {
     throw new Error(`duplicate sky entry for date ${date}`)
   }
 
-  const objectName = `${date}.jpg`
-  const url = await uploadObject(config.skyBucket, objectName, processed.buffer, storage)
+  const url = savePhoto(processed.buffer, `sky/${date}.jpg`)
 
   const entry: SkyEntry = {
     type: 'sky',

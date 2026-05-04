@@ -1,85 +1,78 @@
-import { describe, it, expect, vi } from 'vitest'
-import { mkdtempSync, rmSync, writeFileSync, readFileSync } from 'node:fs'
+import { describe, it, expect, beforeEach, afterEach } from 'vitest'
+import { mkdtempSync, rmSync, writeFileSync, readFileSync, mkdirSync, existsSync } from 'node:fs'
 import { tmpdir } from 'node:os'
-import { join } from 'node:path'
+import { join, dirname } from 'node:path'
+import { chdir, cwd } from 'node:process'
 import { runRemove } from '~/scripts/remove'
 
-function temp(initial: object): { dir: string, manifestPath: string } {
-  const dir = mkdtempSync(join(tmpdir(), 'ig-rm-'))
-  const manifestPath = join(dir, 'manifest.json')
-  writeFileSync(manifestPath, JSON.stringify(initial))
-  return { dir, manifestPath }
+let workDir: string
+let originalCwd: string
+
+beforeEach(() => {
+  originalCwd = cwd()
+  workDir = mkdtempSync(join(tmpdir(), 'ig-rm-'))
+  mkdirSync(join(workDir, 'data'))
+  chdir(workDir)
+})
+
+afterEach(() => {
+  chdir(originalCwd)
+  rmSync(workDir, { recursive: true, force: true })
+})
+
+function writeManifest(content: object): void {
+  writeFileSync('data/manifest.json', JSON.stringify(content))
+}
+
+function writePhotoFile(relPath: string): void {
+  const full = join('photos', relPath)
+  mkdirSync(dirname(full), { recursive: true })
+  writeFileSync(full, 'fake jpeg bytes')
 }
 
 describe('runRemove', () => {
-  it('removes a sky entry by date and deletes the GCS object', async () => {
-    const { dir, manifestPath } = temp({
-      version: 1,
-      license: 'CC0-1.0',
+  it('removes a sky entry and deletes the photo file', async () => {
+    writeManifest({
+      version: 1, license: 'CC0-1.0',
       entries: [{
-        type: 'sky',
-        date: '2026-05-03',
-        url: 'https://storage.googleapis.com/sky-photos/2026-05-03.jpg',
-        w: 100,
-        h: 100,
-        color: '#aabbcc',
-        solstice: false,
+        type: 'sky', date: '2026-05-03',
+        url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-03.jpg',
+        w: 100, h: 100, color: '#aabbcc', solstice: false,
       }],
     })
-    const del = vi.fn().mockResolvedValue([])
-    const fakeStorage = { bucket: vi.fn().mockReturnValue({ file: vi.fn().mockReturnValue({ delete: del }) }) }
-    await runRemove({
-      type: 'sky',
-      id: '2026-05-03',
-      manifestPath,
-      storage: fakeStorage,
-      config: { timezone: 'UTC', skyBucket: 'sky-photos', countBucket: 'count-photos' },
-    })
-    const m = JSON.parse(readFileSync(manifestPath, 'utf8'))
+    writePhotoFile('sky/2026-05-03.jpg')
+
+    await runRemove({ type: 'sky', id: '2026-05-03', manifestPath: 'data/manifest.json' })
+
+    const m = JSON.parse(readFileSync('data/manifest.json', 'utf8'))
     expect(m.entries).toEqual([])
-    expect(del).toHaveBeenCalled()
-    rmSync(dir, { recursive: true, force: true })
+    expect(existsSync('photos/sky/2026-05-03.jpg')).toBe(false)
   })
 
-  it('removes a count entry by number', async () => {
-    const { dir, manifestPath } = temp({
-      version: 1,
-      license: 'CC0-1.0',
+  it('removes a count entry and deletes the photo file', async () => {
+    writeManifest({
+      version: 1, license: 'CC0-1.0',
       entries: [{
-        type: 'count',
-        n: 87,
-        date: '2026-05-03',
-        url: 'https://storage.googleapis.com/count-photos/087-2026-05-03.jpg',
-        w: 100,
-        h: 100,
+        type: 'count', n: 87, date: '2026-05-03',
+        url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/087-2026-05-03.jpg',
+        w: 100, h: 100,
       }],
     })
-    const del = vi.fn().mockResolvedValue([])
-    const fakeStorage = { bucket: vi.fn().mockReturnValue({ file: vi.fn().mockReturnValue({ delete: del }) }) }
-    await runRemove({
-      type: 'count',
-      id: '87',
-      manifestPath,
-      storage: fakeStorage,
-      config: { timezone: 'UTC', skyBucket: 'sky-photos', countBucket: 'count-photos' },
-    })
-    const m = JSON.parse(readFileSync(manifestPath, 'utf8'))
+    writePhotoFile('count/087-2026-05-03.jpg')
+
+    await runRemove({ type: 'count', id: '87', manifestPath: 'data/manifest.json' })
+
+    const m = JSON.parse(readFileSync('data/manifest.json', 'utf8'))
     expect(m.entries).toEqual([])
-    rmSync(dir, { recursive: true, force: true })
+    expect(existsSync('photos/count/087-2026-05-03.jpg')).toBe(false)
   })
 
-  it('throws when no matching entry exists and does not call GCS delete', async () => {
-    const { dir, manifestPath } = temp({ version: 1, license: 'CC0-1.0', entries: [] })
-    const del = vi.fn()
-    const fakeStorage = { bucket: () => ({ file: () => ({ delete: del }) }) }
+  it('throws when no matching entry exists and does not touch any photo file', async () => {
+    writeManifest({ version: 1, license: 'CC0-1.0', entries: [] })
     await expect(runRemove({
       type: 'sky',
       id: '2026-05-03',
-      manifestPath,
-      storage: fakeStorage,
-      config: { timezone: 'UTC', skyBucket: 'sky-photos', countBucket: 'count-photos' },
+      manifestPath: 'data/manifest.json',
     })).rejects.toThrow(/not found/i)
-    expect(del).not.toHaveBeenCalled()
-    rmSync(dir, { recursive: true, force: true })
   })
 })

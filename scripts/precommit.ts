@@ -1,8 +1,7 @@
 #!/usr/bin/env tsx
 import { execFileSync } from 'node:child_process'
 import { validateManifest, type Manifest } from '../utils/manifestSchema'
-import type { IgConfig } from '../utils/config'
-import { loadConfig } from './lib/config-loader'
+import { JSDELIVR_BASE } from './lib/photo-store'
 
 const MANIFEST_PATH = 'data/manifest.json'
 
@@ -46,21 +45,10 @@ catch (err) {
   fail(`${MANIFEST_PATH}: ${(err as Error).message}`)
 }
 
-let config: IgConfig
-try {
-  config = loadConfig()
-}
-catch (err) {
-  fail(`config: ${(err as Error).message}`)
-}
-
-const allowedHosts = [
-  `https://storage.googleapis.com/${config.skyBucket}/`,
-  `https://storage.googleapis.com/${config.countBucket}/`,
-]
+const requiredPrefix = `${JSDELIVR_BASE}/`
 for (const entry of m.entries) {
-  if (!allowedHosts.some(p => entry.url.startsWith(p))) {
-    fail(`${MANIFEST_PATH}: url not in configured buckets [${allowedHosts.join(', ')}]: ${entry.url}`)
+  if (!entry.url.startsWith(requiredPrefix)) {
+    fail(`${MANIFEST_PATH}: url must start with ${requiredPrefix} — got ${entry.url}`)
   }
 }
 

@@ -38,9 +38,5 @@ export function loadConfig(path: string = DEFAULT_CONFIG_PATH): IgConfig {
   if (!isValidTimezone(timezone)) {
     throw new Error(`${path}: timezone "${timezone}" is not a recognized IANA name`)
   }
-  return {
-    timezone,
-    skyBucket: typeof obj.skyBucket === 'string' ? obj.skyBucket : DEFAULT_CONFIG.skyBucket,
-    countBucket: typeof obj.countBucket === 'string' ? obj.countBucket : DEFAULT_CONFIG.countBucket,
-  }
+  return { timezone }
 }

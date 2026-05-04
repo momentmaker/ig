@@ -2,12 +2,11 @@
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { processPhoto } from './lib/pipeline'
-import { uploadObject, type MinimalStorage } from './lib/gcs'
+import { savePhoto } from './lib/photo-store'
 import { loadManifest, saveManifest } from './lib/manifest'
 import type { IgConfig } from '../utils/config'
 import { loadConfig } from './lib/config-loader'
 import type { CountEntry, Manifest } from '../utils/manifestSchema'
-import { Storage } from '@google-cloud/storage'
 
 export interface AddCountOptions {
   n: number
@@ -15,7 +14,6 @@ export interface AddCountOptions {
   date?: string
   whisper?: string
   manifestPath?: string
-  storage?: MinimalStorage
   config?: IgConfig
 }
 
@@ -55,7 +53,6 @@ export async function runAddCount(opts: AddCountOptions): Promise<CountEntry> {
 
   const config = opts.config ?? loadConfig()
   const manifestPath = opts.manifestPath ?? 'data/manifest.json'
-  const storage = opts.storage ?? (new Storage() as unknown as MinimalStorage)
 
   // Fast-path duplicate check on n (always known — primary identifier).
   const earlyManifest = loadManifest(manifestPath)
@@ -73,15 +70,14 @@ export async function runAddCount(opts: AddCountOptions): Promise<CountEntry> {
   const date = opts.date ?? processed.originalDate ?? resolveDate(new Date(), config.timezone)
   assertValidDate(date)
 
-  // Re-check manifest in case of race (defensive — single-threaded CLI but cheap).
+  // Re-check manifest after pipeline (defensive — single-threaded CLI but cheap).
   const manifest = loadManifest(manifestPath)
   if (manifest.entries.some(e => e.type === 'count' && e.n === opts.n)) {
     throw new Error(`duplicate count entry for n=${opts.n}`)
   }
 
   const padded = opts.n.toString().padStart(3, '0')
-  const objectName = `${padded}-${date}.jpg`
-  const url = await uploadObject(config.countBucket, objectName, processed.buffer, storage)
+  const url = savePhoto(processed.buffer, `count/${padded}-${date}.jpg`)
 
   const entry: CountEntry = {
     type: 'count',

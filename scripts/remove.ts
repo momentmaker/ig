@@ -1,37 +1,17 @@
 #!/usr/bin/env tsx
 import { fileURLToPath } from 'node:url'
 import { loadManifest, saveManifest } from './lib/manifest'
-import type { IgConfig } from '../utils/config'
-import { loadConfig } from './lib/config-loader'
+import { deletePhoto, relPathFromUrl } from './lib/photo-store'
 import type { Entry, Manifest } from '../utils/manifestSchema'
-import { Storage } from '@google-cloud/storage'
-
-interface MinimalStorage {
-  bucket: (name: string) => {
-    file: (name: string) => {
-      delete: () => Promise<unknown>
-    }
-  }
-}
 
 export interface RemoveOptions {
   type: 'sky' | 'count'
   id: string
   manifestPath?: string
-  storage?: MinimalStorage
-  config?: IgConfig
-}
-
-function objectNameFor(entry: Entry): string {
-  if (entry.type === 'sky') return `${entry.date}.jpg`
-  const padded = entry.n.toString().padStart(3, '0')
-  return `${padded}-${entry.date}.jpg`
 }
 
 export async function runRemove(opts: RemoveOptions): Promise<Entry> {
-  const config = opts.config ?? loadConfig()
   const manifestPath = opts.manifestPath ?? 'data/manifest.json'
-  const storage = opts.storage ?? (new Storage() as unknown as MinimalStorage)
 
   const manifest = loadManifest(manifestPath)
   let target: Entry | undefined
@@ -46,22 +26,23 @@ export async function runRemove(opts: RemoveOptions): Promise<Entry> {
     throw new Error(`entry not found: type=${opts.type} id=${opts.id}`)
   }
 
-  // Manifest first, then GCS. If the GCS delete fails after the manifest
-  // is saved, we leave a CC0-licensed orphan in the bucket — recoverable by
-  // name. The opposite order would leave a 404 URL in the manifest, which
-  // breaks the rendered site.
+  // Manifest first, then file. If the file delete fails after the manifest
+  // is saved we leave a CC0-licensed orphan in /photos — recoverable by name.
   const next: Manifest = {
     ...manifest,
     entries: manifest.entries.filter(e => e !== target),
   }
   saveManifest(manifestPath, next)
 
-  const bucket = target.type === 'sky' ? config.skyBucket : config.countBucket
-  try {
-    await storage.bucket(bucket).file(objectNameFor(target)).delete()
+  const relPath = relPathFromUrl(target.url)
+  if (relPath !== null) {
+    const removed = deletePhoto(relPath)
+    if (!removed) {
+      console.error(`warning: photo file not found at photos/${relPath} (manifest cleared)`)
+    }
   }
-  catch (err) {
-    console.error(`warning: manifest cleared but GCS delete failed for ${objectNameFor(target)}: ${(err as Error).message}`)
+  else {
+    console.error(`warning: entry url is not a jsDelivr URL, leaving any external file untouched: ${target.url}`)
   }
   return target
 }
@@ -69,7 +50,7 @@ export async function runRemove(opts: RemoveOptions): Promise<Entry> {
 async function main(): Promise<void> {
   const args = process.argv.slice(2)
   if (args.length < 2) {
-    console.error('usage: pnpm remove <type> <id>')
+    console.error('usage: pnpm rm-photo <type> <id>')
     process.exit(1)
   }
   const type = args[0] as 'sky' | 'count'

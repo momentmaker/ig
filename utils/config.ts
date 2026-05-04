@@ -4,12 +4,8 @@
 
 export interface IgConfig {
   timezone: string
-  skyBucket: string
-  countBucket: string
 }
 
 export const DEFAULT_CONFIG: IgConfig = {
   timezone: 'America/New_York',
-  skyBucket: 'sky-photos',
-  countBucket: 'count-photos',
 }

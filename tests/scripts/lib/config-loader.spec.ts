@@ -14,15 +14,9 @@ function makeTempConfig(contents: object): string {
 
 describe('loadConfig', () => {
   it('returns the parsed config when the file exists', () => {
-    const path = makeTempConfig({
-      timezone: 'America/Los_Angeles',
-      skyBucket: 'my-sky',
-      countBucket: 'my-count',
-    })
+    const path = makeTempConfig({ timezone: 'America/Los_Angeles' })
     const cfg = loadConfig(path)
     expect(cfg.timezone).toBe('America/Los_Angeles')
-    expect(cfg.skyBucket).toBe('my-sky')
-    expect(cfg.countBucket).toBe('my-count')
     rmSync(path, { force: true })
   })
 
@@ -40,33 +34,26 @@ describe('loadConfig', () => {
   })
 
   it('throws when timezone is missing', () => {
-    const path = makeTempConfig({ skyBucket: 'a', countBucket: 'b' })
+    const path = makeTempConfig({})
     expect(() => loadConfig(path)).toThrow(/timezone/i)
     rmSync(path, { force: true })
   })
 
   it('throws when timezone is not a recognized IANA name', () => {
-    const path = makeTempConfig({
-      timezone: 'Mars/Olympus_Mons',
-      skyBucket: 'a',
-      countBucket: 'b',
-    })
+    const path = makeTempConfig({ timezone: 'Mars/Olympus_Mons' })
     expect(() => loadConfig(path)).toThrow(/timezone/i)
     rmSync(path, { force: true })
   })
 
-  it('uses default bucket names if both are missing', () => {
-    const path = makeTempConfig({ timezone: 'UTC' })
+  it('ignores unknown fields (forwards-compat)', () => {
+    const path = makeTempConfig({ timezone: 'UTC', someFutureField: 'x' })
     const cfg = loadConfig(path)
-    expect(cfg.skyBucket).toBe(DEFAULT_CONFIG.skyBucket)
-    expect(cfg.countBucket).toBe(DEFAULT_CONFIG.countBucket)
+    expect(cfg.timezone).toBe('UTC')
     rmSync(path, { force: true })
   })
 
   it('exposes a typed shape', () => {
     const cfg: IgConfig = DEFAULT_CONFIG
     expect(typeof cfg.timezone).toBe('string')
-    expect(typeof cfg.skyBucket).toBe('string')
-    expect(typeof cfg.countBucket).toBe('string')
   })
 })

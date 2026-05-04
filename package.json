@@ -22,7 +22,6 @@
     "typecheck": "nuxt typecheck"
   },
   "dependencies": {
-    "@google-cloud/storage": "^7.19.0",
     "exiftool-vendored": "^35.19.0",
     "heic-convert": "^2.1.0",
     "nuxt": "^3.13.0",
