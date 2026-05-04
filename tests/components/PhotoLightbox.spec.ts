@@ -60,4 +60,27 @@ describe('PhotoLightbox', () => {
     expect(wrapper.find('.chevron-prev').exists()).toBe(false)
     expect(wrapper.find('.chevron-next').exists()).toBe(false)
   })
+
+  it('renders the whisper below the caption when provided', () => {
+    const wrapper = mount(PhotoLightbox, {
+      props: {
+        entry: {
+          url: 'https://example.com/x.jpg',
+          alt: 'count 87',
+          caption: '87',
+          whisper: 'parking sign in astoria',
+        },
+      },
+    })
+    const w = wrapper.find('.lightbox-whisper')
+    expect(w.exists()).toBe(true)
+    expect(w.text()).toBe('parking sign in astoria')
+  })
+
+  it('does not render the whisper element when omitted', () => {
+    const wrapper = mount(PhotoLightbox, {
+      props: { entry: { url: 'x', alt: 'a', caption: 'c' } },
+    })
+    expect(wrapper.find('.lightbox-whisper').exists()).toBe(false)
+  })
 })

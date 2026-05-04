@@ -5,6 +5,7 @@ export interface LightboxEntry {
   url: string
   alt: string
   caption: string
+  whisper?: string
 }
 
 interface Props {
@@ -66,6 +67,7 @@ watch(() => props.entry, (e) => {
         </div>
       </div>
       <figcaption class="lightbox-caption">{{ entry.caption }}</figcaption>
+      <p v-if="entry.whisper" class="lightbox-whisper">{{ entry.whisper }}</p>
     </figure>
     <button
       v-if="hasNext"
@@ -126,6 +128,14 @@ watch(() => props.entry, (e) => {
   font-variant: small-caps;
   letter-spacing: 0.1em;
   color: #f7f7f0;
+}
+.lightbox-whisper {
+  margin: 0;
+  font-size: 0.95rem;
+  font-style: italic;
+  color: rgba(247, 247, 240, 0.85);
+  max-width: 80vw;
+  text-align: center;
 }
 .chevron {
   position: absolute; z-index: 2;
