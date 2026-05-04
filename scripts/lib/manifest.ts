@@ -1,4 +1,4 @@
-import { readFileSync, writeFileSync } from 'node:fs'
+import { readFileSync, writeFileSync, renameSync } from 'node:fs'
 import { sortEntries, validateManifest, type Entry, type Manifest } from '../../utils/manifestSchema'
 
 export const MANIFEST_INDENT = 2
@@ -23,7 +23,11 @@ export function saveManifest(path: string, manifest: Manifest): void {
   }
   validateManifest(sorted)
   const text = JSON.stringify(sorted, null, MANIFEST_INDENT) + '\n'
-  writeFileSync(path, text, 'utf8')
+  // Atomic write — temp + rename. SIGINT/crash mid-write cannot leave
+  // data/manifest.json truncated. POSIX rename is atomic on the same fs.
+  const tmp = `${path}.tmp`
+  writeFileSync(tmp, text, 'utf8')
+  renameSync(tmp, path)
 }
 
 export function appendEntry(path: string, entry: Entry): Manifest {
