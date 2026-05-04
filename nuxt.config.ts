@@ -1,3 +1,24 @@
+import { readFileSync } from 'node:fs'
+import { fileURLToPath } from 'node:url'
+
+interface SkyEntryShape { type: 'sky', date: string }
+interface CountEntryShape { type: 'count', n: number }
+interface ManifestShape { entries: (SkyEntryShape | CountEntryShape)[] }
+
+function manifestRoutes(): string[] {
+  const path = fileURLToPath(new URL('./data/manifest.json', import.meta.url))
+  const raw = readFileSync(path, 'utf8')
+  const parsed = JSON.parse(raw) as ManifestShape
+  const out: string[] = []
+  for (const entry of parsed.entries) {
+    if (entry.type === 'sky') {
+      const [y, m, d] = entry.date.split('-')
+      out.push(`/sky/${y}/${m}/${d}`)
+    }
+  }
+  return out
+}
+
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint'],
@@ -5,7 +26,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: 'static',
     prerender: {
-      routes: ['/'],
+      routes: ['/', '/sky', ...manifestRoutes()],
       crawlLinks: false,
       failOnError: true
     }
