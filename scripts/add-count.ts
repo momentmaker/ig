@@ -34,12 +34,22 @@ function assertValidDate(date: string): void {
   }
 }
 
+// Normalize a whisper: collapse all whitespace runs to a single space, trim.
+// Empty result becomes undefined (treat `--whisper ""` as omitted). Per spec,
+// whispers are "one short sentence" so newlines are flattened, not preserved.
+function normalizeWhisper(raw: string | undefined): string | undefined {
+  if (raw === undefined) return undefined
+  const trimmed = raw.replace(/\s+/g, ' ').trim()
+  return trimmed === '' ? undefined : trimmed
+}
+
 export async function runAddCount(opts: AddCountOptions): Promise<CountEntry> {
   if (!Number.isInteger(opts.n) || opts.n < 0 || opts.n > 216) {
     throw new Error(`count.n must be an integer in 0-216, got ${opts.n}`)
   }
-  if (opts.whisper !== undefined && opts.whisper.length > 240) {
-    throw new Error(`whisper too long: ${opts.whisper.length} > 240`)
+  const whisper = normalizeWhisper(opts.whisper)
+  if (whisper !== undefined && whisper.length > 240) {
+    throw new Error(`whisper too long: ${whisper.length} > 240`)
   }
 
   const config = opts.config ?? loadConfig()
@@ -79,7 +89,7 @@ export async function runAddCount(opts: AddCountOptions): Promise<CountEntry> {
     url,
     w: processed.width,
     h: processed.height,
-    ...(opts.whisper !== undefined ? { whisper: opts.whisper } : {}),
+    ...(whisper !== undefined ? { whisper } : {}),
   }
   const next: Manifest = { ...manifest, entries: [...manifest.entries, entry] }
   saveManifest(manifestPath, next)
