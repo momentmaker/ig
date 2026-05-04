@@ -179,7 +179,7 @@ git commit -m "chore: install nuxt 3 + vitest + eslint toolchain"
 - Create: `nuxt.config.ts`
 - Create: `tsconfig.json`
 
-**Why:** Nuxt needs a config to know we're in static-only mode. The spec is explicit: `ssr: false` + `nuxt generate`. The TS config matches fz.ax strict mode (including `noUncheckedIndexedAccess`).
+**Why:** Nuxt needs a config to know we're in static-prerender mode. The spec mandates `ssr: true` + `nuxt generate` so HTML ships fully rendered (photos need to be in HTML for og:image scrapers and JS-disabled visitors). The TS config matches fz.ax strict mode (including `noUncheckedIndexedAccess`).
 
 - [ ] **Step 1: Create `nuxt.config.ts`**
 
@@ -189,11 +189,13 @@ Write exactly:
 // https://nuxt.com/docs/api/configuration/nuxt-config
 export default defineNuxtConfig({
   modules: ['@nuxt/eslint'],
-  ssr: false,
+  ssr: true,
   nitro: {
     preset: 'static',
     prerender: {
-      routes: ['/']
+      routes: ['/'],
+      crawlLinks: false,
+      failOnError: true
     }
   },
   app: {
@@ -427,9 +429,9 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Hex clip-path — flat-top regular hexagon */
+/* Hex clip-path — pointy-top regular hexagon, fills a square box exactly. Matches fz.ax sibling. */
 .hex-clip {
-  clip-path: polygon(25% 0, 75% 0, 100% 50%, 75% 100%, 25% 100%, 0 50%);
+  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
 }
 
 /* Long Now footer — leading zero accent */
@@ -1043,8 +1045,6 @@ jobs:
 
       - name: Set up pnpm
         uses: pnpm/action-setup@v5
-        with:
-          version: 9
 
       - name: Set up Node
         uses: actions/setup-node@v6

@@ -42,4 +42,19 @@ describe('PracticeTile', () => {
     })
     expect(wrapper.find('.tile-backdrop').exists()).toBe(false)
   })
+
+  it('renders the backdrop image with src and alt when backdropUrl is provided', () => {
+    const wrapper = mount(PracticeTile, {
+      props: {
+        name: 'sky',
+        metric: '47 days',
+        href: '/sky',
+        backdropUrl: 'https://example.com/photo.jpg',
+      }
+    })
+    const img = wrapper.find('img.tile-backdrop')
+    expect(img.exists()).toBe(true)
+    expect(img.attributes('src')).toBe('https://example.com/photo.jpg')
+    expect(img.attributes('alt')).toBe('latest sky')
+  })
 })

@@ -1,9 +1,11 @@
 <script setup lang="ts">
+import { currentYear } from '~/utils/longNow'
+
 useHead({
   title: 'ig.fz.ax',
 })
 
-const year = new Date().getUTCFullYear().toString()
+const year = currentYear()
 
 // Stage 1 placeholder — Stages 3-4 derive practices from the manifest.
 const practices = [
@@ -66,10 +68,6 @@ const practices = [
 .tiles-n-4 {
   flex-wrap: wrap;
   max-width: calc(2 * var(--ig-tile-size-desktop) + 2rem);
-}
-
-.tiles-n-7 {
-  /* Hex flower 1 + 6 — implemented in a later stage if/when needed */
 }
 
 .home-caption {

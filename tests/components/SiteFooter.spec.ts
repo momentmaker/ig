@@ -1,6 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import SiteFooter from '~/components/SiteFooter.vue'
+import { currentYear } from '~/utils/longNow'
 
 describe('SiteFooter', () => {
   it('renders a back-link to fz.ax', () => {
@@ -29,7 +30,6 @@ describe('SiteFooter', () => {
   it('renders the year directly after the leading zero with no separator', () => {
     const wrapper = mount(SiteFooter)
     const longNow = wrapper.find('.long-now-line')
-    const currentYear = new Date().getUTCFullYear()
-    expect(longNow.text()).toMatch(new RegExp(`0${currentYear}\\b`))
+    expect(longNow.text()).toMatch(new RegExp(`0${currentYear()}\\b`))
   })
 })

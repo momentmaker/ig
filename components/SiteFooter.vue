@@ -1,5 +1,7 @@
 <script setup lang="ts">
-const year = new Date().getUTCFullYear().toString()
+import { currentYear } from '~/utils/longNow'
+
+const year = currentYear()
 </script>
 
 <template>

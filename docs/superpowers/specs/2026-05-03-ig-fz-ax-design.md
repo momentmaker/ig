@@ -251,7 +251,7 @@ The manifest is read at **build time** (Node-side import in route generators), a
 
 | Layer | Choice | Reason |
 |---|---|---|
-| Framework | Nuxt 3, `ssr: false`, `nuxt generate` | mirrors fz.ax |
+| Framework | Nuxt 3, `ssr: true`, `nuxt generate` (full prerender so HTML works without JS — diverges from fz.ax which is SPA-mode because photos need to ship as real HTML for og:image scrapers and crawlers) | photo-centric site needs prerender |
 | Language | TypeScript strict (`noUncheckedIndexedAccess`) | mirrors fz.ax |
 | State | Single `useManifest` composable | mirrors fz.ax `useFzState` pattern |
 | Image pipeline | `sharp` | resize + dominant-color via `.stats()` |

@@ -4,12 +4,10 @@ interface Props {
   metric: string
   href: string
   backdropUrl?: string | null
-  tintColor?: string | null
 }
 
 const props = withDefaults(defineProps<Props>(), {
   backdropUrl: null,
-  tintColor: null,
 })
 </script>
 

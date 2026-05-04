@@ -4,6 +4,7 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "preinstall": "npx -y only-allow pnpm",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
