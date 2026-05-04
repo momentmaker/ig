@@ -24,10 +24,12 @@ Stage 2 of 5 — CLI + image pipeline shipped. The `/sky` and `/count` pages, so
 ```
 pnpm add-sky <photo-path> [--date YYYY-MM-DD]
 pnpm add-count <number> <photo-path> [--whisper "text"] [--date YYYY-MM-DD]
-pnpm remove sky <date>
-pnpm remove count <number>
-pnpm doctor
+pnpm rm-photo sky <date>
+pnpm rm-photo count <number>
+pnpm verify
 ```
+
+`rm-photo` and `verify` avoid pnpm's built-in `remove`/`doctor` commands.
 
 The CLI:
 1. Reads the EXIF `DateTimeOriginal` from the original file.
@@ -96,7 +98,7 @@ pnpm test         # vitest
 pnpm typecheck    # nuxt typecheck
 pnpm lint         # eslint
 pnpm generate     # static build → .output/public
-pnpm doctor       # validate manifest + counts
+pnpm verify       # validate manifest + counts
 ```
 
 ## Stages
@@ -104,7 +106,7 @@ pnpm doctor       # validate manifest + counts
 | Stage | Tag | What ships |
 |---|---|---|
 | 1 | `stage-1-foundations` | Empty deployable Nuxt 3 site at ig.fz.ax |
-| 2 | `stage-2-cli-pipeline` | `pnpm add-sky` / `add-count` / `remove` / `doctor` |
+| 2 | `stage-2-cli-pipeline` | `pnpm add-sky` / `add-count` / `rm-photo` / `verify` |
 | 3 | _next_ | `/sky` calendar + color-band toggle + lightbox + permalinks |
 | 4 | _next_ | `/count` 217-hex centered field + spiral + permalinks |
 | 5 | _next_ | Solstice treatment, JSON feed, sitemap, og:image, accessibility, fz.ax footer link |
