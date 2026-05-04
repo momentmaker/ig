@@ -153,8 +153,12 @@ if (typeof window !== 'undefined') {
 <style scoped>
 .sky-page { padding: 2rem 1rem; max-width: 1400px; margin: 0 auto; }
 .sky-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 2rem;
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  margin-bottom: 2.5rem;
 }
 .sky-header h1 {
   font-size: 1.5rem;
@@ -168,20 +172,39 @@ if (typeof window !== 'undefined') {
   text-decoration: none;
 }
 .sky-home-link:hover { color: var(--ig-yellow); }
-.view-toggle { display: flex; gap: 0.5rem; }
+.view-toggle {
+  display: flex;
+  gap: 0;
+  border: 1px solid var(--ig-fg-faint);
+  border-color: rgba(127, 127, 127, 0.4);
+}
 .toggle-btn {
   background: transparent;
-  border: 1px solid var(--ig-fg-faint);
+  border: none;
+  border-left: 1px solid rgba(127, 127, 127, 0.4);
   color: var(--ig-fg-faint);
-  padding: 0.4rem 0.8rem;
-  font-size: 0.8rem;
+  padding: 0.45rem 1rem;
+  font-size: 0.75rem;
   font-variant: small-caps;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.12em;
   cursor: pointer;
   font-family: inherit;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+.toggle-btn:first-child { border-left: none; }
+.toggle-btn:hover { color: var(--ig-fg); }
+.toggle-btn:focus { outline: none; }
+.toggle-btn:focus-visible {
+  outline: 1px solid var(--ig-yellow);
+  outline-offset: 2px;
 }
 .toggle-btn.active {
-  border-color: var(--ig-fg);
-  color: var(--ig-fg);
+  background: var(--ig-fg);
+  color: var(--ig-bg);
+}
+@media (max-width: 600px) {
+  .sky-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+  .view-toggle { width: 100%; }
+  .toggle-btn { flex: 1; }
 }
 </style>
