@@ -91,7 +91,7 @@ if (typeof window !== 'undefined') {
 <template>
   <main class="sky-page">
     <header class="sky-header">
-      <h1>sky</h1>
+      <h1><a href="/" class="sky-home-link">sky</a></h1>
       <div class="view-toggle">
         <button
           type="button"
@@ -163,6 +163,11 @@ if (typeof window !== 'undefined') {
   margin: 0;
   font-weight: normal;
 }
+.sky-home-link {
+  color: inherit;
+  text-decoration: none;
+}
+.sky-home-link:hover { color: var(--ig-yellow); }
 .view-toggle { display: flex; gap: 0.5rem; }
 .toggle-btn {
   background: transparent;

@@ -100,6 +100,14 @@ watch(() => props.entry, (e) => {
   clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
   overflow: hidden;
   display: block;
+  /* Stacked drop-shadows fake a hex outline that follows the clip-path edge.
+     Four 1-pixel shadows in N/S/E/W form a continuous 1px ring. Two layers
+     of three sub-pixel offsets give a softer 2px ring. */
+  filter:
+    drop-shadow(2px 0 0 var(--ig-yellow))
+    drop-shadow(-2px 0 0 var(--ig-yellow))
+    drop-shadow(0 2px 0 var(--ig-yellow))
+    drop-shadow(0 -2px 0 var(--ig-yellow));
 }
 .lightbox-photo {
   width: 100%;
