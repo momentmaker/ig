@@ -50,6 +50,16 @@ export default defineNuxtConfig({
       ]
     }
   },
+  runtimeConfig: {
+    public: {
+      buildDate: process.env.BUILD_DATE ?? new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/New_York',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+      }).format(new Date()),
+    },
+  },
   css: ['~/assets/main.css'],
   compatibilityDate: '2026-05-03',
   devtools: { enabled: true }
