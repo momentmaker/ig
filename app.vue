@@ -1,8 +1,12 @@
 <script setup lang="ts">
+import { useSolstice } from '~/composables/useSolstice'
+
+const solstice = useSolstice()
 </script>
 
 <template>
-  <div class="site-root">
+  <div class="site-root" :data-solstice="solstice.active ? solstice.kind : undefined">
+    <SolsticeBanner v-if="solstice.active && solstice.kind !== null && solstice.anchor !== null" :kind="solstice.kind" :anchor="solstice.anchor" />
     <NuxtPage />
     <SiteFooter />
   </div>
@@ -15,7 +19,7 @@
   flex-direction: column;
 }
 
-.site-root > :first-child {
+.site-root > main {
   flex: 1;
 }
 </style>
