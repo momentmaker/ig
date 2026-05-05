@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useManifest } from '~/composables/useManifest'
 import type { SkyEntry } from '~/utils/manifestSchema'
+import { OG_FALLBACK_DESCRIPTION } from '~/utils/copy'
 
 const route = useRoute()
 const date = computed(() => `${route.params.year}-${route.params.month}-${route.params.day}`)
@@ -20,7 +21,7 @@ useHead(() => {
     title: `sky on ${entry.value.date} · ig.fz.ax`,
     meta: [
       { property: 'og:title', content: `sky on ${entry.value.date}` },
-      { property: 'og:description', content: 'noticing what was previously invisible' },
+      { property: 'og:description', content: OG_FALLBACK_DESCRIPTION },
       { property: 'og:image', content: entry.value.url },
       { property: 'og:type', content: 'article' },
     ],

@@ -3,6 +3,7 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useManifest } from '~/composables/useManifest'
 import type { CountEntry } from '~/utils/manifestSchema'
+import { OG_FALLBACK_DESCRIPTION } from '~/utils/copy'
 
 const route = useRoute()
 const n = computed(() => Number(route.params.n))
@@ -20,7 +21,7 @@ useHead(() => {
     title: `the number ${entry.value.n} · ig.fz.ax`,
     meta: [
       { property: 'og:title', content: `the number ${entry.value.n}` },
-      { property: 'og:description', content: entry.value.whisper ?? 'noticing what was previously invisible' },
+      { property: 'og:description', content: entry.value.whisper ?? OG_FALLBACK_DESCRIPTION },
       { property: 'og:image', content: entry.value.url },
       { property: 'og:type', content: 'article' },
     ],
