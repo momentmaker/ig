@@ -158,4 +158,11 @@ watch(() => props.entry, (e) => {
   font-size: 1.5rem;
   cursor: pointer;
 }
+@media (hover: none) {
+  .chevron, .lightbox-close {
+    width: 56px;
+    height: 56px;
+    font-size: 1.75rem;
+  }
+}
 </style>

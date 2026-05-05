@@ -69,7 +69,7 @@ function cellStyle(c: CellModel): string {
 
 <style scoped>
 .count-field {
-  --hex-size: 28px;
+  --hex-size: clamp(10px, calc(50vmin / 18), 28px);
   width: 100%;
   aspect-ratio: 17 / 14;
   max-width: 900px;
@@ -122,7 +122,6 @@ function cellStyle(c: CellModel): string {
   text-shadow: 0 0 3px rgba(0, 0, 0, 0.7);
 }
 @media (max-width: 700px) {
-  .count-field { --hex-size: 18px; }
   .count-cell .cell-num { font-size: 0.6rem; }
 }
 </style>
