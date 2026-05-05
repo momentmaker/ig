@@ -55,12 +55,16 @@ onBeforeUnmount(() => {
   if (typeof document !== 'undefined') document.removeEventListener('keydown', onTrap)
 })
 
-watch(() => props.entry, async (e) => {
+watch(() => props.entry, async (e, prev) => {
   if (e !== null && typeof document !== 'undefined') {
     document.body.style.overflow = 'hidden'
     document.addEventListener('keydown', onTrap)
-    await nextTick()
-    closeRef.value?.focus()
+    // Focus close only on initial open (null → entry). On photo navigation
+    // (entry → entry) keep focus where the user clicked / arrowed.
+    if (prev === null || prev === undefined) {
+      await nextTick()
+      closeRef.value?.focus()
+    }
   }
   else if (typeof document !== 'undefined') {
     document.body.style.overflow = ''

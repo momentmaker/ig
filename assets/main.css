@@ -50,11 +50,10 @@ a:hover {
   text-decoration: underline;
 }
 
-/* Hex clip-path — true regular pointy-top hexagon inscribed in a square box.
-   Width 86.6% (= √3/2), centered. Matches the proportions of the Unicode ⬢
-   glyph fz.ax renders. */
+/* Utility class for inline hex clipping (used by PracticeTile). Mirrors
+   the --hex-clip-square custom property defined in :root. */
 .hex-clip {
-  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  clip-path: var(--hex-clip-square);
 }
 
 /* Long Now footer — leading zero accent */

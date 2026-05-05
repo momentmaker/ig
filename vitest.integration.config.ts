@@ -6,6 +6,8 @@ export default defineConfig({
     environment: 'node',
     globals: false,
     include: ['tests/integration/**/*.spec.ts'],
+    // axe.spec.ts uses @playwright/test, not vitest — runs via `pnpm test:axe`.
+    exclude: ['tests/integration/axe.spec.ts'],
   },
   resolve: {
     alias: {

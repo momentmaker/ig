@@ -2,11 +2,30 @@
 import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import { dirname } from 'node:path'
 import { fileURLToPath } from 'node:url'
-import type { Manifest, Entry, CountEntry } from '../utils/manifestSchema'
+import type { Manifest, Entry } from '../utils/manifestSchema'
 
 const SITE_URL = 'https://ig.fz.ax'
 const FEED_LIMIT = 50
-const TZ_OFFSET = '-04:00'
+const AUTHOR_TZ = 'America/New_York'
+
+// Returns the author-TZ offset for the given YYYY-MM-DD as a ±HH:MM string.
+// DST-aware: -04:00 (EDT) in summer, -05:00 (EST) in winter. Probes noon UTC
+// on that date and reads the formatted offset via Intl.
+function tzOffsetFor(dateYYYYMMDD: string): string {
+  const probe = new Date(`${dateYYYYMMDD}T12:00:00Z`)
+  const parts = new Intl.DateTimeFormat('en-US', {
+    timeZone: AUTHOR_TZ,
+    timeZoneName: 'shortOffset',
+  }).formatToParts(probe)
+  const tzPart = parts.find(p => p.type === 'timeZoneName')?.value ?? 'GMT-04:00'
+  // tzPart looks like "GMT-4" or "GMT-04:00" — normalize to ±HH:MM.
+  const m = tzPart.match(/GMT([+-])(\d{1,2})(?::(\d{2}))?/)
+  if (m === null) return '-04:00'
+  const sign = m[1]
+  const hh = m[2]!.padStart(2, '0')
+  const mm = m[3] ?? '00'
+  return `${sign}${hh}:${mm}`
+}
 
 function urlForEntry(e: Entry): string {
   if (e.type === 'sky') {
@@ -42,12 +61,12 @@ function itemFor(e: Entry): FeedItem {
   const item: FeedItem = {
     id: url,
     url,
-    date_published: `${e.date}T12:00:00${TZ_OFFSET}`,
+    date_published: `${e.date}T12:00:00${tzOffsetFor(e.date)}`,
     title: titleForEntry(e),
     image: e.url,
   }
-  if (e.type === 'count' && (e as CountEntry).whisper !== undefined) {
-    item.content_text = (e as CountEntry).whisper!
+  if (e.type === 'count' && e.whisper !== undefined) {
+    item.content_text = e.whisper
   }
   return item
 }
