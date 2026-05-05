@@ -155,6 +155,30 @@ describe('ogSha', () => {
   })
 })
 
+describe('sky.time', () => {
+  it('accepts sky entry with valid HH:MM time', () => {
+    expect(() => validateEntry({ ...validSky, time: '06:42' })).not.toThrow()
+    expect(() => validateEntry({ ...validSky, time: '23:59' })).not.toThrow()
+    expect(() => validateEntry({ ...validSky, time: '00:00' })).not.toThrow()
+  })
+
+  it('accepts sky entry without time (optional)', () => {
+    expect(() => validateEntry(validSky)).not.toThrow()
+  })
+
+  it('rejects sky entry with bad time format', () => {
+    expect(() => validateEntry({ ...validSky, time: '6:42' })).toThrow(/time/i)
+    expect(() => validateEntry({ ...validSky, time: '24:00' })).toThrow(/time/i)
+    expect(() => validateEntry({ ...validSky, time: '12:60' })).toThrow(/time/i)
+    expect(() => validateEntry({ ...validSky, time: '12:34:56' })).toThrow(/time/i)
+    expect(() => validateEntry({ ...validSky, time: 'abc' })).toThrow(/time/i)
+  })
+
+  it('rejects sky entry with non-string time', () => {
+    expect(() => validateEntry({ ...validSky, time: 642 })).toThrow(/time/i)
+  })
+})
+
 describe('sortEntries', () => {
   it('sorts count entries before sky entries (alphabetical type)', () => {
     const result = sortEntries([validSky, validCount])

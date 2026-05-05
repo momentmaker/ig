@@ -47,7 +47,7 @@ const lightboxData = computed(() => {
   return {
     url: e.url,
     alt: `sky on ${e.date}`,
-    caption: e.date,
+    caption: e.time !== undefined ? `${e.date} · ${e.time}` : e.date,
   }
 })
 

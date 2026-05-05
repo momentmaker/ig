@@ -58,7 +58,9 @@ const nextHref = computed(() => {
     <article v-else class="permalink-content">
       <figure>
         <img :src="entry.url" :alt="`sky on ${entry.date}`" class="permalink-photo">
-        <figcaption class="permalink-caption">{{ entry.date }}</figcaption>
+        <figcaption class="permalink-caption">
+          {{ entry.date }}<template v-if="entry.time !== undefined"> · {{ entry.time }}</template>
+        </figcaption>
       </figure>
       <PermalinkNav
         :prev-href="prevHref"

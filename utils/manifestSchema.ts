@@ -7,6 +7,10 @@ export interface SkyEntry {
   color: string
   solstice: boolean
   ogSha: string
+  // Photo-local wall-clock time (HH:MM, 24h). Optional — older entries lack
+  // EXIF or were ingested before time capture. Display anchors the photo
+  // in the day's rhythm (sunrise vs midday vs golden hour).
+  time?: string
 }
 
 export interface CountEntry {
@@ -29,6 +33,7 @@ export interface Manifest {
 }
 
 const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+const TIME_RE = /^([01]\d|2[0-3]):[0-5]\d$/
 const HEX_COLOR_RE = /^#[0-9a-fA-F]{6}$/
 const SHA256_RE = /^[a-f0-9]{64}$/
 
@@ -61,6 +66,9 @@ export function validateEntry(entry: unknown): asserts entry is Entry {
     }
     if (typeof e.solstice !== 'boolean') {
       throw new Error(`sky.solstice must be boolean, got ${JSON.stringify(e.solstice)}`)
+    }
+    if (e.time !== undefined && (typeof e.time !== 'string' || !TIME_RE.test(e.time))) {
+      throw new Error(`sky.time must be HH:MM (24h) when present, got ${JSON.stringify(e.time)}`)
     }
   }
   if (e.type === 'count') {

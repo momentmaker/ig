@@ -11,6 +11,7 @@ export interface ProcessedPhoto {
   height: number
   dominantColor: string
   originalDate: string | null
+  originalTime: string | null
 }
 
 const MAX_EDGE = 1600
@@ -50,10 +51,31 @@ function parseExifDate(val: unknown): string | null {
   return null
 }
 
+// Parses the photo-local HH:MM from an ExifDateTime object or raw EXIF string.
+// Photo-local: we don't normalize to author TZ — the wall-clock value the
+// camera recorded *at the photo's location* is what anchors the moment.
+function parseExifTime(val: unknown): string | null {
+  if (val === null || val === undefined) return null
+  if (typeof val === 'object' && val !== null) {
+    const obj = val as { hour?: unknown, minute?: unknown }
+    if (typeof obj.hour === 'number' && typeof obj.minute === 'number'
+      && obj.hour >= 0 && obj.hour <= 23 && obj.minute >= 0 && obj.minute <= 59) {
+      const hh = String(obj.hour).padStart(2, '0')
+      const mm = String(obj.minute).padStart(2, '0')
+      return `${hh}:${mm}`
+    }
+  }
+  if (typeof val === 'string') {
+    const m = /^\d{4}:\d{2}:\d{2}\s+(\d{2}):(\d{2})/.exec(val)
+    if (m) return `${m[1]}:${m[2]}`
+  }
+  return null
+}
+
 // exiftool-vendored only accepts file paths. When the caller hands us a path
 // we reuse it directly; when they hand us a Buffer we materialize it briefly
 // in a tmp dir and clean up unconditionally.
-async function readOriginalDate(input: Buffer | string): Promise<string | null> {
+async function readOriginalDateTime(input: Buffer | string): Promise<{ date: string | null, time: string | null }> {
   let path: string
   let cleanup: (() => void) | null = null
   if (typeof input === 'string') {
@@ -67,7 +89,8 @@ async function readOriginalDate(input: Buffer | string): Promise<string | null> 
   }
   try {
     const tags = await exifTagsAt(path)
-    return parseExifDate(tags.DateTimeOriginal ?? tags.CreateDate ?? null)
+    const source = tags.DateTimeOriginal ?? tags.CreateDate ?? null
+    return { date: parseExifDate(source), time: parseExifTime(source) }
   }
   finally {
     cleanup?.()
@@ -108,7 +131,7 @@ async function dimensionsOf(buf: Buffer): Promise<{ width: number, height: numbe
 
 export async function processPhoto(input: Buffer | string): Promise<ProcessedPhoto> {
   const inputBuf = typeof input === 'string' ? readFileSync(input) : input
-  const originalDate = await readOriginalDate(input)
+  const { date: originalDate, time: originalTime } = await readOriginalDateTime(input)
   const jpegInput = await maybeConvertHeic(inputBuf)
   const resized = await resizeToTarget(jpegInput)
   if (resized.byteLength > MAX_BYTES) {
@@ -116,5 +139,5 @@ export async function processPhoto(input: Buffer | string): Promise<ProcessedPho
   }
   const { width, height } = await dimensionsOf(resized)
   const dominantColor = await dominantColorOf(resized)
-  return { buffer: resized, width, height, dominantColor, originalDate }
+  return { buffer: resized, width, height, dominantColor, originalDate, originalTime }
 }

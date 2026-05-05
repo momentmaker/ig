@@ -68,6 +68,7 @@ export async function runAddSky(opts: AddSkyOptions): Promise<SkyEntry> {
     color: processed.dominantColor,
     solstice: isSolstice(date),
     ogSha,
+    ...(processed.originalTime !== null ? { time: processed.originalTime } : {}),
   }
   const next: Manifest = { ...manifest, entries: [...manifest.entries, entry] }
   saveManifest(manifestPath, next)
