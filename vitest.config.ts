@@ -8,6 +8,7 @@ export default defineConfig({
     environment: 'happy-dom',
     globals: false,
     include: ['tests/**/*.spec.ts'],
+    exclude: ['node_modules/**', '.output/**', 'tests/integration/**'],
     coverage: {
       provider: 'v8',
       reporter: ['text', 'html'],
