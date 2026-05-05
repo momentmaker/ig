@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onBeforeUnmount, watch } from 'vue'
+import { onMounted, onBeforeUnmount, watch, ref, nextTick } from 'vue'
 
 export interface LightboxEntry {
   url: string
@@ -20,6 +20,26 @@ const emit = defineEmits<{
   next: []
 }>()
 
+const closeRef = ref<HTMLButtonElement | null>(null)
+const prevRef = ref<HTMLButtonElement | null>(null)
+const nextRef = ref<HTMLButtonElement | null>(null)
+
+function focusables(): HTMLButtonElement[] {
+  return [closeRef.value, prevRef.value, nextRef.value].filter((el): el is HTMLButtonElement => el !== null)
+}
+
+function onTrap(e: KeyboardEvent): void {
+  if (e.key !== 'Tab') return
+  const items = focusables()
+  if (items.length === 0) return
+  e.preventDefault()
+  const idx = items.indexOf(document.activeElement as HTMLButtonElement)
+  const next = e.shiftKey
+    ? items[(idx <= 0 ? items.length - 1 : idx - 1)]!
+    : items[(idx === items.length - 1 ? 0 : idx + 1)]!
+  next.focus()
+}
+
 function onKey(e: KeyboardEvent): void {
   if (props.entry === null) return
   if (e.key === 'Escape') emit('close')
@@ -32,16 +52,21 @@ onMounted(() => {
 })
 onBeforeUnmount(() => {
   document.removeEventListener('keydown', onKey)
+  if (typeof document !== 'undefined') document.removeEventListener('keydown', onTrap)
 })
 
-watch(() => props.entry, (e) => {
+watch(() => props.entry, async (e) => {
   if (e !== null && typeof document !== 'undefined') {
     document.body.style.overflow = 'hidden'
+    document.addEventListener('keydown', onTrap)
+    await nextTick()
+    closeRef.value?.focus()
   }
   else if (typeof document !== 'undefined') {
     document.body.style.overflow = ''
+    document.removeEventListener('keydown', onTrap)
   }
-})
+}, { immediate: true })
 </script>
 
 <template>
@@ -49,6 +74,7 @@ watch(() => props.entry, (e) => {
     <div class="lightbox-backdrop" @click="emit('close')" />
     <button
       v-if="hasPrev"
+      ref="prevRef"
       type="button"
       class="chevron chevron-prev"
       aria-label="previous"
@@ -71,6 +97,7 @@ watch(() => props.entry, (e) => {
     </figure>
     <button
       v-if="hasNext"
+      ref="nextRef"
       type="button"
       class="chevron chevron-next"
       aria-label="next"
@@ -78,7 +105,7 @@ watch(() => props.entry, (e) => {
     >
       →
     </button>
-    <button type="button" class="lightbox-close" aria-label="close" @click.stop="emit('close')">×</button>
+    <button ref="closeRef" type="button" class="lightbox-close" aria-label="close" @click.stop="emit('close')">×</button>
   </div>
 </template>
 

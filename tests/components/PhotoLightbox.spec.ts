@@ -1,4 +1,4 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, test, expect } from 'vitest'
 import { mount } from '@vue/test-utils'
 import PhotoLightbox from '~/components/PhotoLightbox.vue'
 
@@ -82,5 +82,27 @@ describe('PhotoLightbox', () => {
       props: { entry: { url: 'x', alt: 'a', caption: 'c' } },
     })
     expect(wrapper.find('.lightbox-whisper').exists()).toBe(false)
+  })
+
+  test('on mount with entry, focus moves to close button', async () => {
+    const w = mount(PhotoLightbox, {
+      props: { entry: { url: 'x', alt: 'a', caption: 'c' }, hasPrev: true, hasNext: true },
+      attachTo: document.body,
+    })
+    await new Promise(r => setTimeout(r, 0))
+    expect(document.activeElement?.classList.contains('lightbox-close')).toBe(true)
+    w.unmount()
+  })
+
+  test('Tab keydown is captured by trap', async () => {
+    const w = mount(PhotoLightbox, {
+      props: { entry: { url: 'x', alt: 'a', caption: 'c' }, hasPrev: true, hasNext: true },
+      attachTo: document.body,
+    })
+    await new Promise(r => setTimeout(r, 0))
+    const ev = new KeyboardEvent('keydown', { key: 'Tab', bubbles: true, cancelable: true })
+    document.dispatchEvent(ev)
+    expect(w.find('.lightbox').exists()).toBe(true)
+    w.unmount()
   })
 })
