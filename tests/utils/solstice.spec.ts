@@ -1,5 +1,5 @@
-import { describe, it, expect } from 'vitest'
-import { isSolstice, solsticeKind, type SolsticeKind } from '~/utils/solstice'
+import { describe, it, expect, test } from 'vitest'
+import { isSolstice, solsticeKind, activeWindow, type SolsticeKind } from '~/utils/solstice'
 
 describe('isSolstice', () => {
   it('returns true for known 2026 solstices and equinoxes', () => {
@@ -40,5 +40,43 @@ describe('solsticeKind', () => {
 
   it('returns null for non-mile-marker days', () => {
     expect(solsticeKind('2026-05-03')).toBeNull()
+  })
+})
+
+describe('activeWindow', () => {
+  test('returns null on day ±2 from mile-marker', () => {
+    expect(activeWindow('2026-06-18')).toBeNull()
+    expect(activeWindow('2026-06-23')).toBeNull()
+  })
+
+  test('returns kind and anchor for day before mile-marker', () => {
+    expect(activeWindow('2026-06-20')).toEqual({ kind: 'summer', anchor: '2026-06-21' })
+  })
+
+  test('returns kind and anchor on the exact mile-marker', () => {
+    expect(activeWindow('2026-06-21')).toEqual({ kind: 'summer', anchor: '2026-06-21' })
+  })
+
+  test('returns kind and anchor for day after mile-marker', () => {
+    expect(activeWindow('2026-06-22')).toEqual({ kind: 'summer', anchor: '2026-06-21' })
+  })
+
+  test('handles year boundaries (winter solstice in late December)', () => {
+    expect(activeWindow('2025-12-21')).toEqual({ kind: 'winter', anchor: '2025-12-21' })
+    expect(activeWindow('2025-12-22')).toEqual({ kind: 'winter', anchor: '2025-12-21' })
+    expect(activeWindow('2025-12-20')).toEqual({ kind: 'winter', anchor: '2025-12-21' })
+    expect(activeWindow('2025-12-23')).toBeNull()
+  })
+
+  test('handles all four mile-markers in 2026', () => {
+    expect(activeWindow('2026-03-20')).toEqual({ kind: 'vernal', anchor: '2026-03-20' })
+    expect(activeWindow('2026-06-21')).toEqual({ kind: 'summer', anchor: '2026-06-21' })
+    expect(activeWindow('2026-09-23')).toEqual({ kind: 'autumnal', anchor: '2026-09-23' })
+    expect(activeWindow('2026-12-21')).toEqual({ kind: 'winter', anchor: '2026-12-21' })
+  })
+
+  test('throws on invalid date format', () => {
+    expect(() => activeWindow('2026/06/21')).toThrow()
+    expect(() => activeWindow('not-a-date')).toThrow()
   })
 })

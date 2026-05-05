@@ -37,3 +37,32 @@ export function isSolstice(dateYYYYMMDD: string): boolean {
 export function solsticeKind(dateYYYYMMDD: string): SolsticeKind | null {
   return TABLE[dateYYYYMMDD] ?? null
 }
+
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+
+function shiftDate(dateYYYYMMDD: string, deltaDays: number): string {
+  if (!DATE_RE.test(dateYYYYMMDD)) {
+    throw new Error(`invalid date "${dateYYYYMMDD}", expected YYYY-MM-DD`)
+  }
+  const t = Date.UTC(
+    Number(dateYYYYMMDD.slice(0, 4)),
+    Number(dateYYYYMMDD.slice(5, 7)) - 1,
+    Number(dateYYYYMMDD.slice(8, 10)),
+  )
+  const shifted = new Date(t + deltaDays * 86_400_000)
+  return shifted.toISOString().slice(0, 10)
+}
+
+export interface ActiveWindow { kind: SolsticeKind, anchor: string }
+
+export function activeWindow(today: string): ActiveWindow | null {
+  if (!DATE_RE.test(today)) {
+    throw new Error(`invalid date "${today}", expected YYYY-MM-DD`)
+  }
+  for (const delta of [-1, 0, 1]) {
+    const candidate = shiftDate(today, -delta)
+    const kind = solsticeKind(candidate)
+    if (kind !== null) return { kind, anchor: candidate }
+  }
+  return null
+}
