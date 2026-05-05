@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { useManifest } from '~/composables/useManifest'
 import { MAX_N } from '~/utils/spiral'
 import type { CountEntry } from '~/utils/manifestSchema'
@@ -74,11 +74,15 @@ function close(): void {
   }
 }
 
-if (typeof window !== 'undefined') {
-  window.addEventListener('popstate', () => {
-    openIndex.value = null
-  })
+function onPopState(): void {
+  openIndex.value = null
 }
+onMounted(() => {
+  if (typeof window !== 'undefined') window.addEventListener('popstate', onPopState)
+})
+onUnmounted(() => {
+  if (typeof window !== 'undefined') window.removeEventListener('popstate', onPopState)
+})
 </script>
 
 <template>

@@ -6,13 +6,15 @@
 export const MAX_N = 216 // rings 0..8 totalling 1+6+12+18+24+30+36+42+48 = 217
 
 interface Step { dq: number, dr: number }
+// Pointy-top hex axial directions, ordered to walk a ring counter-clockwise
+// starting from (R, 0): NW, W, SW, SE, E, NE.
 const SIDE_DIRS: Step[] = [
-  { dq: 0, dr: -1 }, // step from (R, 0) — first move is N (decreasing r)
-  { dq: -1, dr: 0 }, // W
-  { dq: -1, dr: 1 }, // SW
-  { dq: 0, dr: 1 }, // S
-  { dq: 1, dr: 0 }, // SE (back to east edge from below)
-  { dq: 1, dr: -1 }, // NE (return to start)
+  { dq: 0, dr: -1 },  // NW
+  { dq: -1, dr: 0 },  // W
+  { dq: -1, dr: 1 },  // SW
+  { dq: 0, dr: 1 },   // SE
+  { dq: 1, dr: 0 },   // E
+  { dq: 1, dr: -1 },  // NE
 ]
 
 export function ringOf(n: number): number {
