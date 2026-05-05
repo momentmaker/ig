@@ -38,6 +38,7 @@ export default defineNuxtConfig({
     baseURL: '/',
     cdnURL: '',
     head: {
+      htmlAttrs: { lang: 'en' },
       title: 'ig.fz.ax',
       meta: [
         { name: 'description', content: 'noticing what was previously invisible' },
