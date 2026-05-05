@@ -86,6 +86,7 @@ function onCellClick(cell: SkyCell | null): void {
               :data-date="cell?.date"
               :disabled="cell === null || (cell.kind !== 'has-photo' && cell.kind !== 'today-with-photo')"
               :title="cell?.date ?? ''"
+              :aria-label="cell === null ? undefined : (cell.kind === 'has-photo' || cell.kind === 'today-with-photo' ? `${cell.date}, has photo` : `${cell.date}, no photo`)"
               @click="onCellClick(cell)"
             />
           </span>

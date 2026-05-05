@@ -59,6 +59,7 @@ function cellStyle(c: CellModel): string {
         :data-n="c.n"
         :disabled="c.entry === null"
         :title="c.entry !== null ? `count ${c.n} · ${c.entry.date}` : `${c.n} — not yet found`"
+        :aria-label="c.entry !== null ? `number ${c.n}, found ${c.entry.date}` : `number ${c.n}, not yet found`"
         @click="c.entry !== null && emit('photo-click', c.entry)"
       >
         <span class="cell-num">{{ c.n }}</span>
