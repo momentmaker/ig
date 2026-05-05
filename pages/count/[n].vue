@@ -91,7 +91,7 @@ const nextHref = computed(() => {
   width: min(70vh, 70vw);
   aspect-ratio: 1;
   background: var(--ig-yellow);
-  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  clip-path: var(--hex-clip-square);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -99,7 +99,7 @@ const nextHref = computed(() => {
 .permalink-photo-frame {
   width: calc(100% - 6px);
   height: calc(100% - 6px);
-  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  clip-path: var(--hex-clip-square);
   overflow: hidden;
 }
 .permalink-photo {

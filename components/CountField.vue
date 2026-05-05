@@ -93,7 +93,7 @@ function cellStyle(c: CellModel): string {
   background-color: transparent;
   background-size: cover;
   background-position: center;
-  clip-path: polygon(50% 0%, 100% 25%, 100% 75%, 50% 100%, 0% 75%, 0% 25%);
+  clip-path: var(--hex-clip-tall);
   cursor: default;
   display: flex;
   align-items: center;

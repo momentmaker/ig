@@ -168,7 +168,7 @@ function onCellClick(cell: SkyCell): void {
   align-items: center;
   justify-content: center;
   background: transparent;
-  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  clip-path: var(--hex-clip-square);
 }
 .hex-frame.today {
   background: var(--ig-yellow);
@@ -182,7 +182,7 @@ function onCellClick(cell: SkyCell): void {
   background: transparent;
   padding: 0;
   cursor: default;
-  clip-path: polygon(50% 0%, 93.3% 25%, 93.3% 75%, 50% 100%, 6.7% 75%, 6.7% 25%);
+  clip-path: var(--hex-clip-square);
 }
 .hex-frame.today .hex-cell,
 .hex-frame.solstice-halo .hex-cell {
