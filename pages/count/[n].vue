@@ -22,7 +22,7 @@ useHead(() => {
     meta: [
       { property: 'og:title', content: `the number ${entry.value.n}` },
       { property: 'og:description', content: entry.value.whisper ?? OG_FALLBACK_DESCRIPTION },
-      { property: 'og:image', content: entry.value.url },
+      { property: 'og:image', content: `/og/${entry.value.ogSha}.png` },
       { property: 'og:type', content: 'article' },
     ],
   }

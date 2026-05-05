@@ -22,7 +22,7 @@ useHead(() => {
     meta: [
       { property: 'og:title', content: `sky on ${entry.value.date}` },
       { property: 'og:description', content: OG_FALLBACK_DESCRIPTION },
-      { property: 'og:image', content: entry.value.url },
+      { property: 'og:image', content: `/og/${entry.value.ogSha}.png` },
       { property: 'og:type', content: 'article' },
     ],
   }
