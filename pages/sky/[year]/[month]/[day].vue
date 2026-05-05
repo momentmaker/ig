@@ -60,11 +60,12 @@ const nextHref = computed(() => {
         <img :src="entry.url" :alt="`sky on ${entry.date}`" class="permalink-photo">
         <figcaption class="permalink-caption">{{ entry.date }}</figcaption>
       </figure>
-      <nav class="permalink-nav">
-        <a v-if="prevHref" :href="prevHref" class="nav-link">← previous</a>
-        <a href="/sky" class="nav-link">all sky</a>
-        <a v-if="nextHref" :href="nextHref" class="nav-link">next →</a>
-      </nav>
+      <PermalinkNav
+        :prev-href="prevHref"
+        all-href="/sky"
+        all-label="sky"
+        :next-href="nextHref"
+      />
     </article>
   </main>
 </template>
@@ -79,13 +80,5 @@ const nextHref = computed(() => {
   letter-spacing: 0.1em;
   color: var(--ig-fg-faint);
 }
-.permalink-nav { display: flex; gap: 1.5rem; align-items: center; }
-.nav-link {
-  font-size: 0.85rem;
-  font-variant: small-caps;
-  letter-spacing: 0.1em;
-  color: var(--ig-fg-faint);
-}
-.nav-link:hover { color: var(--ig-blue); }
 .not-found { color: var(--ig-fg-faint); text-align: center; padding: 4rem 0; }
 </style>

@@ -64,11 +64,12 @@ const nextHref = computed(() => {
         <figcaption class="permalink-caption">found {{ entry.date }}</figcaption>
         <p v-if="entry.whisper" class="permalink-whisper">{{ entry.whisper }}</p>
       </figure>
-      <nav class="permalink-nav">
-        <a v-if="prevHref" :href="prevHref" class="nav-link">← previous</a>
-        <a href="/count" class="nav-link">all count</a>
-        <a v-if="nextHref" :href="nextHref" class="nav-link">next →</a>
-      </nav>
+      <PermalinkNav
+        :prev-href="prevHref"
+        all-href="/count"
+        all-label="count"
+        :next-href="nextHref"
+      />
     </article>
   </main>
 </template>
@@ -122,13 +123,5 @@ const nextHref = computed(() => {
   max-width: 60ch;
   margin: 0;
 }
-.permalink-nav { display: flex; gap: 1.5rem; align-items: center; }
-.nav-link {
-  font-size: 0.85rem;
-  font-variant: small-caps;
-  letter-spacing: 0.1em;
-  color: var(--ig-fg-faint);
-}
-.nav-link:hover { color: var(--ig-blue); }
 .not-found { color: var(--ig-fg-faint); text-align: center; padding: 4rem 0; }
 </style>
