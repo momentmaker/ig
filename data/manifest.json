@@ -9,7 +9,8 @@
       "w": 1600,
       "h": 1200,
       "color": "#586878",
-      "solstice": false
+      "solstice": false,
+      "ogSha": "fce2bcc7fc720c34d38ac30bcd13d61dc505e141691a02727ee01c722dcd7742"
     }
   ]
 }

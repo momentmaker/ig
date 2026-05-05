@@ -7,6 +7,7 @@
     "preinstall": "npx -y only-allow pnpm",
     "add-count": "tsx scripts/add-count.ts",
     "add-sky": "tsx scripts/add-sky.ts",
+    "backfill-og-sha": "tsx scripts/backfill-og-sha.ts",
     "build": "nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
