@@ -68,3 +68,22 @@ a:hover {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Solstice/equinox global treatment — active when [data-solstice] is set
+   on .site-root (see app.vue). Color override + slowed today-pulse. */
+.site-root[data-solstice] {
+  --ig-bg: #0a0e1a;
+  --ig-fg: #f7f7f0;
+  background: var(--ig-bg);
+  color: var(--ig-fg);
+}
+
+.site-root[data-solstice] .hex-frame.today {
+  animation-duration: 4s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .site-root[data-solstice] .hex-frame.today {
+    animation: none;
+  }
+}
