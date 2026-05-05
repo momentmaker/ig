@@ -21,5 +21,11 @@ const solstice = useSolstice()
 
 .site-root > main {
   flex: 1;
+  /* width: 100% forces main to fill the flex container's cross-axis. Without
+     it, sparse content (e.g., count-field with all absolute-positioned cells
+     contributes 0 min-content) lets the flex item collapse to its header's
+     intrinsic text width — pages then render at ~200px wide on a 1900px
+     viewport. */
+  width: 100%;
 }
 </style>

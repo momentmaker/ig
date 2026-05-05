@@ -72,7 +72,11 @@ function cellStyle(c: CellModel): string {
 .count-field {
   --hex-size: clamp(10px, calc(50vmin / 18), 28px);
   width: 100%;
-  aspect-ratio: 17 / 14;
+  /* Centered-hex 0..8 spans 29.44 hex-widths × 26 hex-widths (= sqrt(3)·8+0.866
+     by 12+1 each side). Aspect ≈ 1.132. Use 17/15 (1.133) to give the grid
+     enough vertical room — the previous 17/14 (1.214) was too wide and cells
+     overflowed into the header above. */
+  aspect-ratio: 17 / 15;
   max-width: 900px;
   position: relative;
   margin: 0 auto;
