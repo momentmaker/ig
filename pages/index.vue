@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { currentYear } from '~/utils/longNow'
-import { useManifest } from '~/composables/useManifest'
+import { ogImageForRoot, useManifest } from '~/composables/useManifest'
+import { OG_FALLBACK_DESCRIPTION } from '~/utils/copy'
+
+const manifest = useManifest()
+const ogImage = ogImageForRoot(manifest.entries, 'home')
 
 useHead({
   title: 'ig.fz.ax',
+  meta: [
+    { property: 'og:title', content: 'ig.fz.ax' },
+    { property: 'og:description', content: OG_FALLBACK_DESCRIPTION },
+    { property: 'og:image', content: ogImage },
+    { property: 'og:type', content: 'website' },
+  ],
 })
 
 const year = currentYear()
-
-const manifest = useManifest()
 const skyDays = manifest.entries.filter(e => e.type === 'sky').length
 const countFound = manifest.entries.filter(e => e.type === 'count').length
 

@@ -1,14 +1,22 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useManifest } from '~/composables/useManifest'
+import { ogImageForRoot, useManifest } from '~/composables/useManifest'
 import { MAX_N } from '~/utils/spiral'
+import { OG_FALLBACK_DESCRIPTION } from '~/utils/copy'
 import type { CountEntry } from '~/utils/manifestSchema'
+
+const manifest = useManifest()
+const ogImage = ogImageForRoot(manifest.entries, 'count')
 
 useHead({
   title: 'count · ig.fz.ax',
+  meta: [
+    { property: 'og:title', content: 'count · ig.fz.ax' },
+    { property: 'og:description', content: OG_FALLBACK_DESCRIPTION },
+    { property: 'og:image', content: ogImage },
+    { property: 'og:type', content: 'website' },
+  ],
 })
-
-const manifest = useManifest()
 const countEntries = computed(() =>
   manifest.entries.filter((e): e is CountEntry => e.type === 'count'),
 )
