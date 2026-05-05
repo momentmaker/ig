@@ -1,0 +1,576 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "entries": [
+    {
+      "type": "sky",
+      "date": "2026-01-01",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-01.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "type": "count",
+      "n": 1,
+      "date": "2026-01-02",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/001.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-03",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-03.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    {
+      "type": "count",
+      "n": 3,
+      "date": "2026-01-04",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/003.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-05",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-05.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    {
+      "type": "count",
+      "n": 5,
+      "date": "2026-01-06",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/005.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-07",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-07.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    {
+      "type": "count",
+      "n": 7,
+      "date": "2026-01-08",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/007.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-09",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-09.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "8888888888888888888888888888888888888888888888888888888888888888"
+    },
+    {
+      "type": "count",
+      "n": 9,
+      "date": "2026-01-10",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/009.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-11",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-11.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "type": "count",
+      "n": 11,
+      "date": "2026-01-12",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/011.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-13",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-13.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    {
+      "type": "count",
+      "n": 13,
+      "date": "2026-01-14",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/013.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-15",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-15.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    {
+      "type": "count",
+      "n": 15,
+      "date": "2026-01-16",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/015.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-17",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-17.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "type": "count",
+      "n": 17,
+      "date": "2026-01-18",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/017.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-19",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-19.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    {
+      "type": "count",
+      "n": 19,
+      "date": "2026-01-20",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/019.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-21",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-21.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    {
+      "type": "count",
+      "n": 21,
+      "date": "2026-01-22",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/021.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-23",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-23.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    {
+      "type": "count",
+      "n": 23,
+      "date": "2026-01-24",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/023.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-25",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-25.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "8888888888888888888888888888888888888888888888888888888888888888"
+    },
+    {
+      "type": "count",
+      "n": 25,
+      "date": "2026-01-26",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/025.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-27",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-27.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "type": "count",
+      "n": 27,
+      "date": "2026-01-28",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/027.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-29",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-29.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    {
+      "type": "count",
+      "n": 29,
+      "date": "2026-01-30",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/029.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    {
+      "type": "sky",
+      "date": "2026-01-31",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-01-31.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    {
+      "type": "count",
+      "n": 31,
+      "date": "2026-02-01",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/031.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-02",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-02.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "type": "count",
+      "n": 33,
+      "date": "2026-02-03",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/033.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-04",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-04.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    {
+      "type": "count",
+      "n": 35,
+      "date": "2026-02-05",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/035.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-06",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-06.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    {
+      "type": "count",
+      "n": 37,
+      "date": "2026-02-07",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/037.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-08",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-08.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    {
+      "type": "count",
+      "n": 39,
+      "date": "2026-02-09",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/039.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-10",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-10.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "8888888888888888888888888888888888888888888888888888888888888888"
+    },
+    {
+      "type": "count",
+      "n": 41,
+      "date": "2026-02-11",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/041.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-12",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-12.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "type": "count",
+      "n": 43,
+      "date": "2026-02-13",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/043.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-14",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-14.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    {
+      "type": "count",
+      "n": 45,
+      "date": "2026-02-15",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/045.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-16",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-16.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"
+    },
+    {
+      "type": "count",
+      "n": 47,
+      "date": "2026-02-17",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/047.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-18",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-18.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "0000000000000000000000000000000000000000000000000000000000000000"
+    },
+    {
+      "type": "count",
+      "n": 49,
+      "date": "2026-02-19",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/049.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "1111111111111111111111111111111111111111111111111111111111111111"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-20",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-20.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "2222222222222222222222222222222222222222222222222222222222222222"
+    },
+    {
+      "type": "count",
+      "n": 51,
+      "date": "2026-02-21",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/051.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "3333333333333333333333333333333333333333333333333333333333333333"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-22",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-22.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "4444444444444444444444444444444444444444444444444444444444444444"
+    },
+    {
+      "type": "count",
+      "n": 53,
+      "date": "2026-02-23",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/053.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "5555555555555555555555555555555555555555555555555555555555555555"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-24",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-24.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "6666666666666666666666666666666666666666666666666666666666666666"
+    },
+    {
+      "type": "count",
+      "n": 55,
+      "date": "2026-02-25",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/055.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "7777777777777777777777777777777777777777777777777777777777777777"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-26",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-26.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "8888888888888888888888888888888888888888888888888888888888888888"
+    },
+    {
+      "type": "count",
+      "n": 57,
+      "date": "2026-02-27",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/057.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "9999999999999999999999999999999999999999999999999999999999999999"
+    },
+    {
+      "type": "sky",
+      "date": "2026-02-28",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-02-28.jpg",
+      "w": 1600,
+      "h": 1200,
+      "color": "#586878",
+      "solstice": false,
+      "ogSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    {
+      "type": "count",
+      "n": 59,
+      "date": "2026-03-01",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/059.jpg",
+      "w": 1600,
+      "h": 1200,
+      "ogSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    }
+  ]
+}
