@@ -103,6 +103,47 @@ describe('validateManifest', () => {
   })
 })
 
+describe('ogSha', () => {
+  it('accepts entry with ogSha', () => {
+    const e = {
+      type: 'sky', date: '2026-05-04',
+      url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg',
+      w: 1600, h: 1200, color: '#586878', solstice: false,
+      ogSha: 'a'.repeat(64),
+    }
+    expect(() => validateEntry(e)).not.toThrow()
+  })
+
+  it('accepts entry without ogSha (transitional)', () => {
+    const e = {
+      type: 'sky', date: '2026-05-04',
+      url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg',
+      w: 1600, h: 1200, color: '#586878', solstice: false,
+    }
+    expect(() => validateEntry(e)).not.toThrow()
+  })
+
+  it('rejects ogSha that is not 64 hex chars', () => {
+    const e = {
+      type: 'sky', date: '2026-05-04',
+      url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg',
+      w: 1600, h: 1200, color: '#586878', solstice: false,
+      ogSha: 'too-short',
+    }
+    expect(() => validateEntry(e)).toThrow(/ogSha/)
+  })
+
+  it('rejects ogSha when present but non-string', () => {
+    const e = {
+      type: 'sky', date: '2026-05-04',
+      url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg',
+      w: 1600, h: 1200, color: '#586878', solstice: false,
+      ogSha: 12345,
+    }
+    expect(() => validateEntry(e)).toThrow(/ogSha/)
+  })
+})
+
 describe('sortEntries', () => {
   it('sorts count entries before sky entries (alphabetical type)', () => {
     const result = sortEntries([validSky, validCount])
