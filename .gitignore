@@ -2,6 +2,7 @@
 node_modules/
 .output/
 .nuxt/
+.og-cache/
 # dist (no slash) — Nuxt creates a symlink dist → .output/public; trailing slash would skip it
 dist
 coverage/

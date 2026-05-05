@@ -10,7 +10,7 @@
     "backfill-og-sha": "tsx scripts/backfill-og-sha.ts",
     "build": "nuxt build",
     "dev": "nuxt dev",
-    "generate": "nuxt generate",
+    "generate": "nuxt generate && tsx scripts/postbuild.ts",
     "preview": "nuxt preview",
     "rm-photo": "tsx scripts/remove.ts",
     "verify": "tsx scripts/doctor.ts",
