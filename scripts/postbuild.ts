@@ -3,6 +3,7 @@ import { fileURLToPath } from 'node:url'
 import { cpSync, mkdirSync } from 'node:fs'
 import { buildOgImages } from './build-og-images'
 import { buildFeed } from './build-feed'
+import { buildSitemap } from './build-sitemap'
 
 const OG_CACHE_DIR = '.og-cache'
 const OG_OUTPUT_DIR = '.output/public/og'
@@ -16,7 +17,9 @@ async function main(): Promise<void> {
   console.log('postbuild: feed')
   await buildFeed()
   console.log('  wrote .output/public/feed.json')
-  // Task 19 adds buildSitemap() call here.
+  console.log('postbuild: sitemap')
+  await buildSitemap()
+  console.log('  wrote .output/public/sitemap.xml')
 }
 
 if (process.argv[1] !== undefined && process.argv[1] === fileURLToPath(import.meta.url)) {

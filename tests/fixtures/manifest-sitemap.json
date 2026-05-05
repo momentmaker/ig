@@ -1,0 +1,9 @@
+{
+  "version": 1,
+  "license": "CC0-1.0",
+  "entries": [
+    { "type": "sky", "date": "2026-05-04", "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg", "w": 1600, "h": 1200, "color": "#586878", "solstice": false, "ogSha": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" },
+    { "type": "sky", "date": "2026-05-03", "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-03.jpg", "w": 1600, "h": 1200, "color": "#444444", "solstice": false, "ogSha": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb" },
+    { "type": "count", "n": 47, "date": "2026-05-02", "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/047.jpg", "w": 1600, "h": 1200, "ogSha": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd" }
+  ]
+}
