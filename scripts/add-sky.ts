@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { processPhoto } from './lib/pipeline'
@@ -56,6 +57,7 @@ export async function runAddSky(opts: AddSkyOptions): Promise<SkyEntry> {
   }
 
   const url = savePhoto(processed.buffer, `sky/${date}.jpg`)
+  const ogSha = createHash('sha256').update(processed.buffer).digest('hex')
 
   const entry: SkyEntry = {
     type: 'sky',
@@ -65,6 +67,7 @@ export async function runAddSky(opts: AddSkyOptions): Promise<SkyEntry> {
     h: processed.height,
     color: processed.dominantColor,
     solstice: isSolstice(date),
+    ogSha,
   }
   const next: Manifest = { ...manifest, entries: [...manifest.entries, entry] }
   saveManifest(manifestPath, next)

@@ -48,6 +48,7 @@ describe('runAddCount', () => {
       expect(e.n).toBe(87)
       expect(e.url).toBe('https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/087-2026-05-03.jpg')
       expect(e.whisper).toBe('parking sign in astoria')
+      expect(e.ogSha).toMatch(/^[a-f0-9]{64}$/)
     }
     expect(existsSync('photos/count/087-2026-05-03.jpg')).toBe(true)
   }, 30_000)
@@ -86,7 +87,7 @@ describe('runAddCount', () => {
       entries: [{
         type: 'count', n: 5, date: '2026-04-01',
         url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/005-2026-04-01.jpg',
-        w: 100, h: 100,
+        w: 100, h: 100, ogSha: 'a'.repeat(64),
       }],
     }))
     await expect(runAddCount({

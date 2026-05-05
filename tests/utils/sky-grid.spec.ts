@@ -6,12 +6,14 @@ const sky2026: SkyEntry = {
   type: 'sky', date: '2026-05-04',
   url: 'https://storage.googleapis.com/skyphotos/2026-05-04.jpg',
   w: 1600, h: 1200, color: '#586878', solstice: false,
+  ogSha: 'a'.repeat(64),
 }
 
 const sky2025: SkyEntry = {
   type: 'sky', date: '2025-12-29',
   url: 'https://storage.googleapis.com/skyphotos/2025-12-29.jpg',
   w: 1600, h: 1200, color: '#abc123', solstice: false,
+  ogSha: 'b'.repeat(64),
 }
 
 describe('skyEntriesByYear', () => {

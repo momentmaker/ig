@@ -16,6 +16,7 @@ const validSky: SkyEntry = {
   h: 1200,
   color: '#a8c4e6',
   solstice: false,
+  ogSha: 'a'.repeat(64),
 }
 
 const validCount: CountEntry = {
@@ -25,6 +26,7 @@ const validCount: CountEntry = {
   url: 'https://storage.googleapis.com/count-photos/087-2026-05-03.jpg',
   w: 1600,
   h: 1200,
+  ogSha: 'b'.repeat(64),
 }
 
 describe('validateEntry', () => {
@@ -114,13 +116,22 @@ describe('ogSha', () => {
     expect(() => validateEntry(e)).not.toThrow()
   })
 
-  it('accepts entry without ogSha (transitional)', () => {
+  it('rejects sky entry without ogSha (post-backfill)', () => {
     const e = {
       type: 'sky', date: '2026-05-04',
       url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg',
       w: 1600, h: 1200, color: '#586878', solstice: false,
     }
-    expect(() => validateEntry(e)).not.toThrow()
+    expect(() => validateEntry(e)).toThrow(/ogSha/)
+  })
+
+  it('rejects count entry without ogSha (post-backfill)', () => {
+    const e = {
+      type: 'count', n: 47, date: '2026-05-04',
+      url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/047.jpg',
+      w: 1600, h: 1200,
+    }
+    expect(() => validateEntry(e)).toThrow(/ogSha/)
   })
 
   it('rejects ogSha that is not 64 hex chars', () => {

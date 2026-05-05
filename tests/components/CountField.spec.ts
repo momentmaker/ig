@@ -8,6 +8,7 @@ const count87: CountEntry = {
   url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/087-2026-05-03.jpg',
   w: 1600, h: 1200,
   whisper: 'parking sign in astoria',
+  ogSha: 'a'.repeat(64),
 }
 
 describe('CountField', () => {

@@ -6,7 +6,7 @@ export interface SkyEntry {
   h: number
   color: string
   solstice: boolean
-  ogSha?: string
+  ogSha: string
 }
 
 export interface CountEntry {
@@ -17,7 +17,7 @@ export interface CountEntry {
   w: number
   h: number
   whisper?: string
-  ogSha?: string
+  ogSha: string
 }
 
 export type Entry = SkyEntry | CountEntry
@@ -52,10 +52,8 @@ export function validateEntry(entry: unknown): asserts entry is Entry {
   if (typeof e.h !== 'number' || !Number.isFinite(e.h) || e.h <= 0) {
     throw new Error(`entry.h must be a positive finite number, got ${JSON.stringify(e.h)}`)
   }
-  if (e.ogSha !== undefined) {
-    if (typeof e.ogSha !== 'string' || !SHA256_RE.test(e.ogSha)) {
-      throw new Error(`entry.ogSha must be 64 hex chars when present, got ${JSON.stringify(e.ogSha)}`)
-    }
+  if (typeof e.ogSha !== 'string' || !SHA256_RE.test(e.ogSha)) {
+    throw new Error(`entry.ogSha must be 64 hex chars, got ${JSON.stringify(e.ogSha)}`)
   }
   if (e.type === 'sky') {
     if (typeof e.color !== 'string' || !HEX_COLOR_RE.test(e.color)) {

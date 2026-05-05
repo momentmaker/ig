@@ -20,6 +20,7 @@ const sky: SkyEntry = {
   h: 1200,
   color: '#a8c4e6',
   solstice: false,
+  ogSha: 'a'.repeat(64),
 }
 
 const count: CountEntry = {
@@ -29,6 +30,7 @@ const count: CountEntry = {
   url: 'https://storage.googleapis.com/count-photos/087-2026-05-04.jpg',
   w: 1600,
   h: 1200,
+  ogSha: 'b'.repeat(64),
 }
 
 describe('loadManifest', () => {

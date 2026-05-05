@@ -7,6 +7,7 @@ const sky: SkyEntry = {
   type: 'sky', date: '2026-05-04',
   url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg',
   w: 1600, h: 1200, color: '#586878', solstice: false,
+  ogSha: 'a'.repeat(64),
 }
 
 describe('SkyColorBand', () => {

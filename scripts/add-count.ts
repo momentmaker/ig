@@ -1,4 +1,5 @@
 #!/usr/bin/env tsx
+import { createHash } from 'node:crypto'
 import { readFileSync } from 'node:fs'
 import { fileURLToPath } from 'node:url'
 import { processPhoto } from './lib/pipeline'
@@ -78,6 +79,7 @@ export async function runAddCount(opts: AddCountOptions): Promise<CountEntry> {
 
   const padded = opts.n.toString().padStart(3, '0')
   const url = savePhoto(processed.buffer, `count/${padded}-${date}.jpg`)
+  const ogSha = createHash('sha256').update(processed.buffer).digest('hex')
 
   const entry: CountEntry = {
     type: 'count',
@@ -87,6 +89,7 @@ export async function runAddCount(opts: AddCountOptions): Promise<CountEntry> {
     w: processed.width,
     h: processed.height,
     ...(whisper !== undefined ? { whisper } : {}),
+    ogSha,
   }
   const next: Manifest = { ...manifest, entries: [...manifest.entries, entry] }
   saveManifest(manifestPath, next)

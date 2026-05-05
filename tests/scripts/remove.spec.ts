@@ -38,6 +38,7 @@ describe('runRemove', () => {
         type: 'sky', date: '2026-05-03',
         url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-03.jpg',
         w: 100, h: 100, color: '#aabbcc', solstice: false,
+        ogSha: 'a'.repeat(64),
       }],
     })
     writePhotoFile('sky/2026-05-03.jpg')
@@ -55,7 +56,7 @@ describe('runRemove', () => {
       entries: [{
         type: 'count', n: 87, date: '2026-05-03',
         url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/087-2026-05-03.jpg',
-        w: 100, h: 100,
+        w: 100, h: 100, ogSha: 'b'.repeat(64),
       }],
     })
     writePhotoFile('count/087-2026-05-03.jpg')

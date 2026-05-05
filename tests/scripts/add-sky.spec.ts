@@ -48,6 +48,7 @@ describe('runAddSky', () => {
       expect(e.url).toBe('https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg')
       expect(e.color).toMatch(/^#[0-9a-f]{6}$/)
       expect(e.solstice).toBe(false)
+      expect(e.ogSha).toMatch(/^[a-f0-9]{64}$/)
     }
     expect(existsSync('photos/sky/2026-05-04.jpg')).toBe(true)
   }, 30_000)
@@ -63,6 +64,7 @@ describe('runAddSky', () => {
         date: '2026-05-04',
         url: 'https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-04.jpg',
         w: 100, h: 100, color: '#aabbcc', solstice: false,
+        ogSha: 'a'.repeat(64),
       }],
     }))
 
@@ -90,6 +92,7 @@ describe('runAddSky', () => {
     const e = m.entries[0]
     if (e?.type === 'sky') {
       expect(e.solstice).toBe(true)
+      expect(e.ogSha).toMatch(/^[a-f0-9]{64}$/)
     }
     expect(existsSync('photos/sky/2026-12-21.jpg')).toBe(true)
   }, 30_000)

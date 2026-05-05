@@ -25,9 +25,9 @@ describe('runDoctor', () => {
     const path = tempManifest({
       version: 1, license: 'CC0-1.0',
       entries: [
-        { type: 'sky', date: '2026-05-03', url: 'https://storage.googleapis.com/sky-photos/x.jpg', w: 100, h: 100, color: '#aabbcc', solstice: false },
-        { type: 'sky', date: '2026-05-04', url: 'https://storage.googleapis.com/sky-photos/y.jpg', w: 100, h: 100, color: '#aabbcc', solstice: false },
-        { type: 'count', n: 5, date: '2026-04-01', url: 'https://storage.googleapis.com/count-photos/005-x.jpg', w: 100, h: 100 },
+        { type: 'sky', date: '2026-05-03', url: 'https://storage.googleapis.com/sky-photos/x.jpg', w: 100, h: 100, color: '#aabbcc', solstice: false, ogSha: 'a'.repeat(64) },
+        { type: 'sky', date: '2026-05-04', url: 'https://storage.googleapis.com/sky-photos/y.jpg', w: 100, h: 100, color: '#aabbcc', solstice: false, ogSha: 'b'.repeat(64) },
+        { type: 'count', n: 5, date: '2026-04-01', url: 'https://storage.googleapis.com/count-photos/005-x.jpg', w: 100, h: 100, ogSha: 'c'.repeat(64) },
       ],
     })
     const report = runDoctor({ manifestPath: path })
