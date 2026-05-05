@@ -130,12 +130,13 @@ watch(() => props.entry, async (e, prev) => {
   max-width: 90vw; max-height: 90vh;
 }
 /* Outer hex is the yellow ring (background color showing through the gap).
-   `flex-shrink: 0` prevents the parent flex column from squishing the box
-   vertically when caption + whisper push total figure height past max-height,
-   which would otherwise break aspect-ratio: 1 and warp the hex shape. */
+   width AND height are both set explicitly (instead of width + aspect-ratio)
+   because aspect-ratio is overridden by content's intrinsic min-height when
+   the inner photo is portrait — the box would stretch tall and warp the hex
+   shape. flex-shrink: 0 keeps the box from being squished by figure flex. */
 .lightbox-photo-outer {
   width: min(75vh, 80vw);
-  aspect-ratio: 1;
+  height: min(75vh, 80vw);
   flex-shrink: 0;
   background: var(--ig-yellow);
   clip-path: var(--hex-clip-square);
