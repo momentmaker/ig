@@ -25,5 +25,6 @@ withDefaults(defineProps<Props>(), { prevHref: null, nextHref: null })
   color: var(--ig-fg-faint);
   text-decoration: none;
 }
-.nav-link:hover { color: var(--ig-blue); }
+.nav-link:hover,
+.nav-link:focus-visible { color: var(--ig-yellow); }
 </style>

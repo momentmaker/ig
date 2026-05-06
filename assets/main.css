@@ -44,10 +44,12 @@ html, body {
 a {
   color: var(--ig-blue);
   text-decoration: none;
+  transition: color 0.15s ease;
 }
 
-a:hover {
-  text-decoration: underline;
+a:hover,
+a:focus-visible {
+  color: var(--ig-yellow);
 }
 
 /* Utility class for inline hex clipping (used by PracticeTile). Mirrors
