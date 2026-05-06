@@ -10,7 +10,7 @@ const year = currentYear()
     <span class="long-now-line">
       <span class="long-now-zero">0</span>{{ year }} · the long now
     </span>
-    <span class="footer-license">CC0 photos · MIT code</span>
+    <span class="footer-license">CC0 photos · <a href="https://github.com/momentmaker/ig" target="_blank" rel="noopener noreferrer" class="footer-source" aria-label="view source on github">MIT code</a></span>
   </footer>
 </template>
 
@@ -28,12 +28,18 @@ const year = currentYear()
   flex-wrap: wrap;
 }
 
-.footer-back-link {
+.footer-back-link,
+.footer-source {
   color: var(--ig-fg-faint);
+  text-decoration: none;
+  transition: color 0.15s ease;
 }
 
-.footer-back-link:hover {
-  color: var(--ig-blue);
+.footer-back-link:hover,
+.footer-back-link:focus-visible,
+.footer-source:hover,
+.footer-source:focus-visible {
+  color: var(--ig-yellow);
 }
 
 .long-now-line {
