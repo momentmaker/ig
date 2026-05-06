@@ -37,45 +37,50 @@ async function exifTagsAt(path: string): Promise<Record<string, unknown>> {
   return await exiftool.read(path) as Record<string, unknown>
 }
 
-function parseExifDate(val: unknown): string | null {
-  if (val === null || val === undefined) return null
-  if (typeof val === 'object' && 'toDate' in val && typeof (val as { toDate: () => Date }).toDate === 'function') {
-    const d = (val as { toDate: () => Date }).toDate()
-    if (Number.isNaN(d.getTime())) return null
-    return d.toISOString().slice(0, 10)
-  }
-  if (typeof val === 'string') {
-    const m = /^(\d{4}):(\d{2}):(\d{2})/.exec(val)
-    if (m) return `${m[1]}-${m[2]}-${m[3]}`
-  }
-  return null
+// Formats a UTC Date in the author timezone as YYYY-MM-DD and HH:MM. Uses
+// Intl with en-CA which renders YYYY-MM-DD natively. Both date and time
+// derive from the same instant — keeping them coherent for late-evening
+// photos whose UTC date crosses midnight.
+function formatInTz(d: Date, tz: string): { date: string, time: string } {
+  const parts = new Intl.DateTimeFormat('en-CA', {
+    timeZone: tz,
+    year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', hour12: false,
+  }).formatToParts(d)
+  const get = (type: string): string => parts.find(p => p.type === type)?.value ?? ''
+  const yyyy = get('year')
+  const mm = get('month')
+  const dd = get('day')
+  // Intl can return '24' for midnight in some locales; normalize to '00'.
+  const hour = get('hour') === '24' ? '00' : get('hour')
+  const minute = get('minute')
+  return { date: `${yyyy}-${mm}-${dd}`, time: `${hour}:${minute}` }
 }
 
-// Parses the photo-local HH:MM from an ExifDateTime object or raw EXIF string.
-// Photo-local: we don't normalize to author TZ — the wall-clock value the
-// camera recorded *at the photo's location* is what anchors the moment.
-function parseExifTime(val: unknown): string | null {
-  if (val === null || val === undefined) return null
-  if (typeof val === 'object' && val !== null) {
-    const obj = val as { hour?: unknown, minute?: unknown }
-    if (typeof obj.hour === 'number' && typeof obj.minute === 'number'
-      && obj.hour >= 0 && obj.hour <= 23 && obj.minute >= 0 && obj.minute <= 59) {
-      const hh = String(obj.hour).padStart(2, '0')
-      const mm = String(obj.minute).padStart(2, '0')
-      return `${hh}:${mm}`
-    }
+function parseExifDateTime(val: unknown, tz: string): { date: string | null, time: string | null } {
+  if (val === null || val === undefined) return { date: null, time: null }
+  if (typeof val === 'object' && 'toDate' in val && typeof (val as { toDate: () => Date }).toDate === 'function') {
+    const d = (val as { toDate: () => Date }).toDate()
+    if (Number.isNaN(d.getTime())) return { date: null, time: null }
+    const { date, time } = formatInTz(d, tz)
+    return { date, time }
   }
+  // Fallback for raw string values: no TZ info available, return components
+  // verbatim. Modern iPhones always emit ExifDateTime objects with offsets,
+  // so this path is for legacy / unusual cameras only.
   if (typeof val === 'string') {
-    const m = /^\d{4}:\d{2}:\d{2}\s+(\d{2}):(\d{2})/.exec(val)
-    if (m) return `${m[1]}:${m[2]}`
+    const m = /^(\d{4}):(\d{2}):(\d{2})\s+(\d{2}):(\d{2})/.exec(val)
+    if (m) return { date: `${m[1]}-${m[2]}-${m[3]}`, time: `${m[4]}:${m[5]}` }
+    const dOnly = /^(\d{4}):(\d{2}):(\d{2})/.exec(val)
+    if (dOnly) return { date: `${dOnly[1]}-${dOnly[2]}-${dOnly[3]}`, time: null }
   }
-  return null
+  return { date: null, time: null }
 }
 
 // exiftool-vendored only accepts file paths. When the caller hands us a path
 // we reuse it directly; when they hand us a Buffer we materialize it briefly
 // in a tmp dir and clean up unconditionally.
-async function readOriginalDateTime(input: Buffer | string): Promise<{ date: string | null, time: string | null }> {
+async function readOriginalDateTime(input: Buffer | string, tz: string): Promise<{ date: string | null, time: string | null }> {
   let path: string
   let cleanup: (() => void) | null = null
   if (typeof input === 'string') {
@@ -90,7 +95,7 @@ async function readOriginalDateTime(input: Buffer | string): Promise<{ date: str
   try {
     const tags = await exifTagsAt(path)
     const source = tags.DateTimeOriginal ?? tags.CreateDate ?? null
-    return { date: parseExifDate(source), time: parseExifTime(source) }
+    return parseExifDateTime(source, tz)
   }
   finally {
     cleanup?.()
@@ -129,9 +134,9 @@ async function dimensionsOf(buf: Buffer): Promise<{ width: number, height: numbe
   return { width: md.width ?? 0, height: md.height ?? 0 }
 }
 
-export async function processPhoto(input: Buffer | string): Promise<ProcessedPhoto> {
+export async function processPhoto(input: Buffer | string, opts: { tz: string }): Promise<ProcessedPhoto> {
   const inputBuf = typeof input === 'string' ? readFileSync(input) : input
-  const { date: originalDate, time: originalTime } = await readOriginalDateTime(input)
+  const { date: originalDate, time: originalTime } = await readOriginalDateTime(input, opts.tz)
   const jpegInput = await maybeConvertHeic(inputBuf)
   const resized = await resizeToTarget(jpegInput)
   if (resized.byteLength > MAX_BYTES) {

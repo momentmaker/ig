@@ -66,7 +66,7 @@ export async function runAddCount(opts: AddCountOptions): Promise<CountEntry> {
   }
 
   const photo = readFileSync(opts.photoPath)
-  const processed = await processPhoto(photo)
+  const processed = await processPhoto(photo, { tz: config.timezone })
 
   const date = opts.date ?? processed.originalDate ?? resolveDate(new Date(), config.timezone)
   assertValidDate(date)

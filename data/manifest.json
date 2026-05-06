@@ -35,14 +35,14 @@
     },
     {
       "type": "sky",
-      "date": "2026-05-06",
-      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-06.jpg",
+      "date": "2026-05-05",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-05.jpg",
       "w": 1600,
       "h": 1200,
       "color": "#687888",
       "solstice": false,
       "ogSha": "f5b77acc22b3ec3f854c46ac3a2f5a5a1d385b52b2c64030ddd77196fde5b3d4",
-      "time": "19:28"
+      "time": "20:28"
     }
   ]
 }
