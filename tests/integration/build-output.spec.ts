@@ -40,4 +40,32 @@ describe('build output', () => {
   test('og-brand.png exists in deployed public', () => {
     expect(existsSync('.output/public/og-brand.png')).toBe(true)
   })
+
+  test('home composite og image exists when manifest has both sky and count', () => {
+    // #given a manifest with at least one sky and one count
+    const manifest = JSON.parse(readFileSync('data/manifest.json', 'utf8'))
+    const hasSky = manifest.entries.some((e: { type: string }) => e.type === 'sky')
+    const hasCount = manifest.entries.some((e: { type: string }) => e.type === 'count')
+    if (!hasSky || !hasCount) return // skip when fallback is expected
+    // #when listing og output
+    const files = readdirSync('.output/public/og').filter(f => f.startsWith('home-') && f.endsWith('.png'))
+    // #then a single home composite is produced and is non-trivial in size
+    expect(files.length).toBe(1)
+    const homePath = `.output/public/og/${files[0]}`
+    expect(statSync(homePath).size).toBeGreaterThan(10_000)
+  })
+
+  test('home og:image meta in / points at the home composite', () => {
+    // #given the prerendered home page
+    const html = readFileSync('.output/public/index.html', 'utf8')
+    const manifest = JSON.parse(readFileSync('data/manifest.json', 'utf8'))
+    const hasSky = manifest.entries.some((e: { type: string }) => e.type === 'sky')
+    const hasCount = manifest.entries.some((e: { type: string }) => e.type === 'count')
+    if (!hasSky || !hasCount) return
+    // #when matching the og:image meta
+    const m = html.match(/og:image"\s+content="([^"]+)"/)
+    // #then it references the home composite
+    expect(m).not.toBeNull()
+    expect(m![1]).toMatch(/^\/og\/home-[a-f0-9]+-[a-f0-9]+\.png$/)
+  })
 })
