@@ -141,6 +141,17 @@
       "solstice": false,
       "ogSha": "74144a359f1da350c17b577a46489ee22eebf82ea5bdc1df7d8671715d41830c",
       "time": "20:30"
+    },
+    {
+      "type": "sky",
+      "date": "2026-05-14",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-14.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#0868b8",
+      "solstice": false,
+      "ogSha": "a4fc1d9d2f4b7ba73e2f97b2e60bb2b0ef79abf81b90f49a436c0cc91d6fe2ef",
+      "time": "09:27"
     }
   ]
 }
