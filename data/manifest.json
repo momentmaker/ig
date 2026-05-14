@@ -130,6 +130,17 @@
       "solstice": false,
       "ogSha": "d0872d9b4dd98f04f2926a267e4d9316074e281c95b999bcaed22a1f1503529d",
       "time": "08:10"
+    },
+    {
+      "type": "sky",
+      "date": "2026-05-13",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-13.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#084888",
+      "solstice": false,
+      "ogSha": "74144a359f1da350c17b577a46489ee22eebf82ea5bdc1df7d8671715d41830c",
+      "time": "20:30"
     }
   ]
 }
