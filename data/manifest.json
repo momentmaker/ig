@@ -229,6 +229,17 @@
       "solstice": false,
       "ogSha": "5450b4453af78317d5e946f00500ca19a445f5f6c2cb3fedc44eaaf169cb2363",
       "time": "21:26"
+    },
+    {
+      "type": "sky",
+      "date": "2026-05-22",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-22.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#687888",
+      "solstice": false,
+      "ogSha": "d50c870a603f046701b2f816dd94d27b2096838ee6519d517d09d2ee8aff49de",
+      "time": "14:19"
     }
   ]
 }
