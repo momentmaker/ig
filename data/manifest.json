@@ -273,6 +273,17 @@
       "solstice": false,
       "ogSha": "dacc980cfbe05ddd680a51183faffe576a2d159e8d22803f1d9b6cf050dd7c30",
       "time": "12:32"
+    },
+    {
+      "type": "sky",
+      "date": "2026-05-26",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-05-26.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#8898a8",
+      "solstice": false,
+      "ogSha": "f6f4ff0d62519529117314ac49dde47fb8c766c390fb13b7f07186c922abe8b9",
+      "time": "10:15"
     }
   ]
 }
