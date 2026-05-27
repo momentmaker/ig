@@ -24,6 +24,16 @@
     },
     {
       "type": "count",
+      "n": 8,
+      "date": "2026-05-27",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/008-2026-05-27.jpg",
+      "w": 1200,
+      "h": 1600,
+      "whisper": "sticker outside of a collectible shop",
+      "ogSha": "0aa7cb43f516532b1df16d995b4396bb81e97cb0472494652a9871405ed1b58c"
+    },
+    {
+      "type": "count",
       "n": 50,
       "date": "2026-05-09",
       "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/050-2026-05-09.jpg",
