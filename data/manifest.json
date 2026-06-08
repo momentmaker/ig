@@ -24,6 +24,16 @@
     },
     {
       "type": "count",
+      "n": 7,
+      "date": "2026-06-08",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/007-2026-06-08.jpg",
+      "w": 1200,
+      "h": 1600,
+      "whisper": "a platform at a gas station",
+      "ogSha": "9bed13defc3fea41d3a3cc77c68a9179ccd547c362d6b8027bcf42c631883356"
+    },
+    {
+      "type": "count",
       "n": 8,
       "date": "2026-05-27",
       "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/count/008-2026-05-27.jpg",
