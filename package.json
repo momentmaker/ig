@@ -29,8 +29,8 @@
     "heic-convert": "^2.1.0",
     "nuxt": "^3.13.0",
     "sharp": "^0.34.5",
-    "vue": "latest",
-    "vue-router": "latest"
+    "vue": "^3.5.0",
+    "vue-router": "^4.4.0"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
@@ -47,7 +47,8 @@
     "simple-git-hooks": "^2.13.1",
     "tsx": "^4.21.0",
     "typescript": "^6.0.2",
-    "vitest": "^4.1.4"
+    "vitest": "^4.1.4",
+    "vue-tsc": "~3.0.0"
   },
   "packageManager": "pnpm@9.15.0",
   "engines": {
