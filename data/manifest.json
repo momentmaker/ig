@@ -1157,6 +1157,17 @@
       "solstice": false,
       "ogSha": "f074377246538d2e6c5095b6870ed687d3324b0b7c9333b7cd1502c840e1cb74",
       "time": "20:07"
+    },
+    {
+      "type": "sky",
+      "date": "2026-08-09",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-08-09.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#185888",
+      "solstice": false,
+      "ogSha": "4ededb56c15914273750a6efdb7f555c0da0c10823716ea361a61fc38bd4a9d8",
+      "time": "19:31"
     }
   ]
 }
