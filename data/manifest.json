@@ -1729,6 +1729,17 @@
       "solstice": false,
       "ogSha": "142ba3d377e087ee4514592bbb1f086c4402763da1c9943bffbac2b8c7263a2e",
       "time": "19:11"
+    },
+    {
+      "type": "sky",
+      "date": "2026-09-30",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-09-30.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#a8b8c8",
+      "solstice": false,
+      "ogSha": "2717f8fdef2aed45e711dda7f216e468841e2cc241ea5f8b7be733447d8f4a15",
+      "time": "13:04"
     }
   ]
 }
