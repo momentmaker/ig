@@ -1850,6 +1850,17 @@
       "solstice": false,
       "ogSha": "cd55416296f33bd0883b4cfdc9ffd248f9bb97c81fd75c9ddb681de673e12ecb",
       "time": "19:14"
+    },
+    {
+      "type": "sky",
+      "date": "2026-10-11",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-10-11.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#084888",
+      "solstice": false,
+      "ogSha": "bddf433f98a2f6926fda7549162147869682dcbcefdabc55f480407def643982",
+      "time": "18:39"
     }
   ]
 }
