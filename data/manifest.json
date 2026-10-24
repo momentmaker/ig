@@ -1971,6 +1971,17 @@
       "solstice": false,
       "ogSha": "2f330a984379dcf5a20c51657a7b16a7530d7d58ded57f70ebbe80a8d0b781f0",
       "time": "18:43"
+    },
+    {
+      "type": "sky",
+      "date": "2026-10-22",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-10-22.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#6888a8",
+      "solstice": false,
+      "ogSha": "df0fd28dce5b9333ad2a6ab7b6b45069cdd5212d6dc8bbca261451967c036871",
+      "time": "06:52"
     }
   ]
 }
