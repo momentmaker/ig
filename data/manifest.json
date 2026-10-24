@@ -1982,6 +1982,17 @@
       "solstice": false,
       "ogSha": "df0fd28dce5b9333ad2a6ab7b6b45069cdd5212d6dc8bbca261451967c036871",
       "time": "06:52"
+    },
+    {
+      "type": "sky",
+      "date": "2026-10-23",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-10-23.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#586888",
+      "solstice": false,
+      "ogSha": "7d7839c57ce7561f3882b5c4d799e06b981df3d2f3fd6814ac2e1d27b94a8795",
+      "time": "19:02"
     }
   ]
 }
