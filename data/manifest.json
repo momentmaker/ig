@@ -2015,6 +2015,17 @@
       "solstice": false,
       "ogSha": "9211ac97ad733bbeb1da3a851b30aaa0d033eda9463e487167aa7e9ad2743709",
       "time": "18:46"
+    },
+    {
+      "type": "sky",
+      "date": "2026-10-26",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-10-26.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#2868b8",
+      "solstice": false,
+      "ogSha": "64e7785d2c6cc9e41bfa244cfdf1596a8a25af3d073bb4f6bfa36dca5047929b",
+      "time": "11:08"
     }
   ]
 }
