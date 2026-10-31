@@ -2037,6 +2037,17 @@
       "solstice": false,
       "ogSha": "6f5d25eb15c705e259f4429da3fffae168fffabad4ae87a3fc82ff645a4cd27e",
       "time": "06:29"
+    },
+    {
+      "type": "sky",
+      "date": "2026-10-28",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-10-28.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#5888c8",
+      "solstice": false,
+      "ogSha": "b935dcee5917dee0757129a49be599ee13011d18397eb5977cfa720922a01837",
+      "time": "18:45"
     }
   ]
 }
