@@ -2092,6 +2092,16 @@
       "solstice": false,
       "ogSha": "281e9cef8c6f4f2991a237585041db2945206e3231c8f036a8076542cfb6b607",
       "time": "10:35"
+    },
+    {
+      "type": "sky",
+      "date": "2026-11-03",
+      "url": "https://cdn.jsdelivr.net/gh/momentmaker/ig@latest/photos/sky/2026-11-03.jpg",
+      "w": 1200,
+      "h": 1600,
+      "color": "#6898c8",
+      "solstice": false,
+      "ogSha": "540f89628479bc3f25679398a72eccf6d9be26b10b6a233ae9f4e06287d96ac3"
     }
   ]
 }
